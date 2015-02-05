@@ -1,6 +1,6 @@
 # Spdx
 
-TODO: Write a gem description
+A SPDX license checker
 
 ## Installation
 

@@ -2,6 +2,8 @@
 
 A SPDX license checker
 
+This gem allows you to find standard SPDX licenses from similar, but not exact names using Levenshtein distances to find the closest match.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,11 +22,13 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+Spdx.find('Apache 2') # => <SpdxLicenses::License:0x007fa3a2b462c8 @id="Apache-2.0", @name="Apache License 2.0", @osi_approved=true>
+```
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/spdx/fork )
+1. Fork it ( https://github.com/andrew/spdx/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

@@ -8,6 +8,7 @@ module Spdx
   end
 
   def self.closest(name)
+    name.gsub!(/software|license/i, '')
     match = names.sort_by do |key|
       Text::Levenshtein.distance(name, key)
     end.first

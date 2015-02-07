@@ -16,6 +16,7 @@ describe Spdx do
 
     it "should return nil for garbage" do
       expect(Spdx.find('foo bar baz')).to be_nil
+      expect(Spdx.find('Copyright Zendesk. All Rights Reserved.')).to be_nil
       expect(Spdx.find('https://github.com/AuthorizeNet/sdk-ruby/blob/master/license.txt')).to be_nil
     end
 

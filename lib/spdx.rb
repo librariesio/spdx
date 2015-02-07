@@ -9,10 +9,16 @@ module Spdx
 
   def self.closest(name)
     name.gsub!(/software|license/i, '')
-    match = names.sort_by do |key|
-      Text::Levenshtein.distance(name, key)
-    end.first
-    SpdxLicenses[match] || find_by_name(match)
+    best_match = matches(name).first
+    return nil unless best_match
+    id = best_match[0]
+    SpdxLicenses[id] || find_by_name(id)
+  end
+
+  def self.matches(name, max_distance = 40)
+    names.map { |key| [key, Text::Levenshtein.distance(name, key)] }
+      .select { |arr| arr[1] <= max_distance }
+      .sort_by { |arr| arr[1] }
   end
 
   def self.find_by_name(name)

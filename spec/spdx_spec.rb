@@ -14,6 +14,10 @@ describe Spdx do
       expect(Spdx.find('Apache License 2.0').name).to eq("Apache License 2.0")
     end
 
+    it "should return nil for garbage" do
+      expect(Spdx.find('https://github.com/AuthorizeNet/sdk-ruby/blob/master/license.txt')).to be_nil
+    end
+
     it "should return know license from an alias" do
       expect(Spdx.find('The Apache Software License, Version 2.0').name).to eq("Apache License 2.0")
       expect(Spdx.find('Apache 2.0').name).to eq("Apache License 2.0")

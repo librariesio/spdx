@@ -1,6 +1,6 @@
 require "spdx/version"
 require "spdx-licenses"
-require "text"
+require "fuzzy_match"
 
 module Spdx
   def self.find(name)
@@ -8,17 +8,25 @@ module Spdx
   end
 
   def self.closest(name)
-    name.gsub!(/software|license/i, '')
-    best_match = matches(name).first
+    name.gsub!(/#{stop_words.join('|')}/i, '')
+    name.gsub!(/(\d)/, ' \1 ')
+    best_match = fuzzy_match(name)
     return nil unless best_match
-    id = best_match[0]
-    SpdxLicenses[id] || find_by_name(id)
+    SpdxLicenses[best_match] || find_by_name(best_match)
   end
 
   def self.matches(name, max_distance = 40)
     names.map { |key| [key, Text::Levenshtein.distance(name, key)] }
       .select { |arr| arr[1] <= max_distance }
       .sort_by { |arr| arr[1] }
+  end
+
+  def self.fuzzy_match(name)
+    FuzzyMatch.new(names).find(name, must_match_at_least_one_word: true)
+  end
+
+  def self.stop_words
+    %w(version software license the)
   end
 
   def self.find_by_name(name)

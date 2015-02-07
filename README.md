@@ -2,7 +2,7 @@
 
 A SPDX license checker
 
-This gem allows you to find standard SPDX licenses from similar, but not exact names using Levenshtein distances to find the closest match.
+This gem allows you to find standard SPDX licenses from similar, but not exact names using [FuzzyMatch](https://github.com/seamusabshere/fuzzy_match) to find the closest match.
 
 ## Installation
 

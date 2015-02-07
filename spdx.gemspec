@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "spdx-licenses", "~> 1.0"
-  spec.add_dependency "text", "~> 1.3"
+  spec.add_dependency "fuzzy_match", "~> 2.1"
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"

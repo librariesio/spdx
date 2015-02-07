@@ -26,7 +26,7 @@ module Spdx
   end
 
   def self.stop_words
-    %w(version software license the right)
+    %w(version software the right)
   end
 
   def self.find_by_name(name)

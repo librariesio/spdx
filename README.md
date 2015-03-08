@@ -28,7 +28,7 @@ Spdx.find('Apache 2') # => <SpdxLicenses::License:0x007fa3a2b462c8 @id="Apache-2
 
 ## Contributing
 
-1. Fork it ( https://github.com/andrew/spdx/fork )
+1. Fork it ( https://github.com/librariesio/spdx/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

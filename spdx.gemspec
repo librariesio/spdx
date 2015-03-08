@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Andrew Nesbitt"]
   spec.email         = ["andrewnez@gmail.com"]
   spec.summary       = %q{A SPDX license checker}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/librariesio/spdx"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

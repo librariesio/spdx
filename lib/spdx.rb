@@ -4,7 +4,7 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    SpdxLicenses[name] || closest(name)
+    SpdxLicenses[name] || find_by_special_case(name) || closest(name)
   end
 
   def self.closest(name)
@@ -32,6 +32,26 @@ module Spdx
   def self.find_by_name(name)
     match = SpdxLicenses.data.find{|k,v| v['name'] == name }
     SpdxLicenses[match[0]] if match
+  end
+
+  def self.find_by_special_case(name)
+    SpdxLicenses[special_cases[name.downcase]]
+  end
+
+  def self.special_cases
+    {
+      'perl_5' => 'Artistic-1.0-Perl',
+      'bsd3' => 'BSD-3-Clause',
+      'bsd' => 'BSD-3-Clause',
+      'new bsd license' => 'BSD-3-Clause',
+      'gplv3' => 'GPL-3.0',
+      'gpl-2' => 'GPL-2.0',
+      'gpl' => 'GPL-2.0+',
+      "gnu lesser general public license" => 'LGPL-2.1+',
+      'lgplv2 or later' => 'LGPL-2.1+',
+      'gplv2 or later' => 'GPL-2.0+',
+      'public domain' => 'Unlicense'
+    }
   end
 
   def self.names

@@ -30,5 +30,19 @@ describe Spdx do
       expect(Spdx.find('The MIT License').name).to eq("MIT License")
       expect(Spdx.find('UNLICENSE').name).to eq("The Unlicense")
     end
+
+    it "should return know licenses for special cases" do
+      expect(Spdx.find('perl_5').name).to eq("Artistic License 1.0 (Perl)")
+      expect(Spdx.find('BSD3').name).to eq('BSD 3-clause "New" or "Revised" License')
+      expect(Spdx.find('BSD').name).to eq('BSD 3-clause "New" or "Revised" License')
+      expect(Spdx.find('GPLv3').name).to eq('GNU General Public License v3.0 only')
+      expect(Spdx.find('LGPLv2 or later').name).to eq('GNU Lesser General Public License v2.1 or later')
+      expect(Spdx.find('GPLv2 or later').name).to eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('Public Domain').name).to eq('The Unlicense')
+      expect(Spdx.find('GPL-2').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('GPL').name).to eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to eq('GNU Lesser General Public License v2.1 or later')
+      expect(Spdx.find('New BSD License').name).to eq('BSD 3-clause "New" or "Revised" License')
+    end
   end
 end

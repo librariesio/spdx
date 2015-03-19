@@ -1,4 +1,4 @@
-# Spdx
+# [Spdx](http://libraries.io/rubygems/spdx)
 
 A SPDX license checker
 

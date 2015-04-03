@@ -8,6 +8,7 @@ describe Spdx do
 
     it "should work with case-insentive short codes" do
       expect(Spdx.find('apache-2.0').name).to eq("Apache License 2.0")
+      expect(Spdx.find('agpl-3.0').name).to eq("GNU Affero General Public License v3.0")
     end
 
     it "should return know license from full name" do

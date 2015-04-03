@@ -4,7 +4,15 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    SpdxLicenses[name] || find_by_special_case(name) || closest(name)
+    name = name.downcase
+    lookup(name) || find_by_special_case(name) || closest(name)
+  end
+
+  def self.lookup(name)
+    return false if name.nil?
+    return SpdxLicenses[name] if SpdxLicenses[name]
+    lowercase = SpdxLicenses.data.keys.find{|k| k.downcase == name.downcase }
+    SpdxLicenses[lowercase] if lowercase
   end
 
   def self.closest(name)
@@ -12,7 +20,7 @@ module Spdx
     name = name.gsub(/(\d)/, ' \1 ')
     best_match = fuzzy_match(name)
     return nil unless best_match
-    SpdxLicenses[best_match] || find_by_name(best_match)
+    lookup(best_match) || find_by_name(best_match)
   end
 
   def self.matches(name, max_distance = 40)
@@ -31,11 +39,11 @@ module Spdx
 
   def self.find_by_name(name)
     match = SpdxLicenses.data.find{|k,v| v['name'] == name }
-    SpdxLicenses[match[0]] if match
+    lookup(match[0]) if match
   end
 
   def self.find_by_special_case(name)
-    SpdxLicenses[special_cases[name.downcase]]
+    lookup(special_cases[name.downcase])
   end
 
   def self.special_cases

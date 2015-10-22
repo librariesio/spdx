@@ -26,6 +26,12 @@ Or install it yourself as:
 Spdx.find('Apache 2') # => <SpdxLicenses::License:0x007fa3a2b462c8 @id="Apache-2.0", @name="Apache License 2.0", @osi_approved=true>
 ```
 
+## Testing
+
+Run the tests with:
+
+    $ bundle exec rake
+
 ## Contributing
 
 1. Fork it ( https://github.com/librariesio/spdx/fork )

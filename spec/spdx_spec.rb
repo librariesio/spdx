@@ -68,7 +68,6 @@ describe Spdx do
       expect(Spdx.find('GPL').name).to eq('GNU General Public License v2.0 or later')
       expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to eq('GNU Lesser General Public License v2.1 or later')
       expect(Spdx.find('New BSD License').name).to eq('BSD 3-clause "New" or "Revised" License')
-
     end
   end
 end

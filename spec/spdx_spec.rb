@@ -33,6 +33,11 @@ describe Spdx do
     end
 
     it "should return know licenses for special cases" do
+      expect(Spdx.find('MPL1').name).to eq('Mozilla Public License 1.0')
+      expect(Spdx.find('MPL1.0').name).to eq('Mozilla Public License 1.0')
+      expect(Spdx.find('MPL1.1').name).to eq('Mozilla Public License 1.1')
+      expect(Spdx.find('MPL2').name).to eq('Mozilla Public License 2.0')
+      expect(Spdx.find('MPL2.0').name).to eq('Mozilla Public License 2.0')
       expect(Spdx.find('GPL3').name).to eq('GNU General Public License v3.0 only')
       expect(Spdx.find('GPL v3').name).to eq('GNU General Public License v3.0 only')
       expect(Spdx.find('GPL3').name).to eq('GNU General Public License v3.0 only')
@@ -52,8 +57,6 @@ describe Spdx do
       expect(Spdx.find("GPL 2.0").name).to eq('GNU General Public License v2.0 only')
       expect(Spdx.find("New BSD License (GPL-compatible)").name).to eq('BSD 3-clause "New" or "Revised" License')
       expect(Spdx.find("The GPL V3").name).to eq('GNU General Public License v3.0 only')
-
-
       expect(Spdx.find('perl_5').name).to eq("Artistic License 1.0 (Perl)")
       expect(Spdx.find('BSD3').name).to eq('BSD 3-clause "New" or "Revised" License')
       expect(Spdx.find('BSD').name).to eq('BSD 3-clause "New" or "Revised" License')
@@ -65,6 +68,7 @@ describe Spdx do
       expect(Spdx.find('GPL').name).to eq('GNU General Public License v2.0 or later')
       expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to eq('GNU Lesser General Public License v2.1 or later')
       expect(Spdx.find('New BSD License').name).to eq('BSD 3-clause "New" or "Revised" License')
+
     end
   end
 end

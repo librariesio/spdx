@@ -141,7 +141,11 @@ module Spdx
       'epl' => 'EPL-1.0',
       'mit-license' => 'MIT',
       'iscl' => 'ISC',
-      'wtf' => 'WTFPL'
+      'wtf' => 'WTFPL',
+      '2-clause bsdl' => 'BSD-2-clause',
+      '3-clause bsdl' => 'BSD-3-clause',
+      '2-clause bsd' => 'BSD-2-clause',
+      '3-clause bsd' => 'BSD-3-clause'
     }
   end
 

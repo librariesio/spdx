@@ -64,7 +64,6 @@ module Spdx
       'gpl v3' => 'GPL-3.0',
       'gpl v2' => 'GPL-2.0',
       'gpl 3.0' => 'GPL-3.0',
-      'gplv3' => 'GPL-3.0',
       'gpl 2.0' => 'GPL-2.0',
       'gpl-3' => 'GPL-3.0',
       'gpl-2' => 'GPL-2.0',

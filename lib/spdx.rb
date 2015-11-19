@@ -34,7 +34,7 @@ module Spdx
   end
 
   def self.stop_words
-    %w(version software the right)
+    %w(version software the or right)
   end
 
   def self.find_by_name(name)
@@ -43,7 +43,7 @@ module Spdx
   end
 
   def self.find_by_special_case(name)
-    lookup(special_cases[name.downcase])
+    lookup(special_cases[name.downcase.strip])
   end
 
   def self.special_cases
@@ -139,6 +139,7 @@ module Spdx
       'cddl 1.1' => 'CDDL-1.1',
       'epl' => 'EPL-1.0',
       'mit-license' => 'MIT',
+      '(mit or x11)' => 'MIT',
       'iscl' => 'ISC',
       'wtf' => 'WTFPL',
       '2-clause bsdl' => 'BSD-2-clause',

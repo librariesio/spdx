@@ -95,6 +95,8 @@ module Spdx
       'artistic_2' => 'Artistic-2.0',
       'artistic_1' => 'Artistic-1.0',
       'lgpl 2.1' => 'LGPL-2.1',
+      'lgpl' => 'LGPL-3.0',
+      'lgplv2.1+' => 'LGPL-2.1+',
       'lgplv3' => 'LGPL-3.0',
       'gplv3+' => 'GPL-3.0+',
       'alv2' => 'Apache-2.0',

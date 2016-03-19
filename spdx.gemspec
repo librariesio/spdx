@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Spdx::VERSION
   spec.authors       = ["Andrew Nesbitt"]
   spec.email         = ["andrewnez@gmail.com"]
-  spec.summary       = %q{A SPDX license checker}
+  spec.summary       = %q{A SPDX license normalizer}
   spec.homepage      = "https://github.com/librariesio/spdx"
   spec.license       = "MIT"
 

@@ -1,6 +1,6 @@
 # [Spdx](http://libraries.io/rubygems/spdx)
 
-A SPDX license checker
+A SPDX license normalizer
 
 This gem allows you to find standard SPDX licenses from similar, but not exact names using [FuzzyMatch](https://github.com/seamusabshere/fuzzy_match) to find the closest match.
 

@@ -43,7 +43,15 @@ module Spdx
   end
 
   def self.find_by_special_case(name)
+    gpl = gpl_match(name)
+    return gpl if gpl
     lookup(special_cases[name.downcase.strip])
+  end
+
+  def self.gpl_match(name)
+    match = name.match(/^(l|a)?gpl-?\s?_?v?(1|2|3)\.?(\d)?(\+)?$/i)
+    return unless match
+    lookup "#{match[1]}GPL-#{match[2]}.#{match[3] || 0}#{match[4]}"
   end
 
   def self.special_cases
@@ -52,35 +60,14 @@ module Spdx
       'bsd3' => 'BSD-3-Clause',
       'bsd' => 'BSD-3-Clause',
       'new bsd license' => 'BSD-3-Clause',
-      'gpl_1' => 'GPL-1.0',
-      'gplv2' => 'GPL-2.0',
-      'gpl2' => 'GPL-2.0',
-      'gpl_2' => 'GPL-2.0',
-      'gpl 2' => 'GPL-2.0',
-      'gpl v2' => 'GPL-2.0',
-      'gpl 2.0' => 'GPL-2.0',
-      'gpl-2' => 'GPL-2.0',
-      'gpl20' => 'GPL-2.0',
-      'gpl v2+' => 'GPL-2.0+',
-      'gplv2+' => 'GPL-2.0+',
       'gpl' => 'GPL-2.0+',
       'gpl-2 | gpl-3 [expanded from: gpl (≥ 2.0)]' => 'GPL-2.0+',
       'gpl-2 | gpl-3 [expanded from: gpl]' => 'GPL-2.0+',
       'gpl-2 | gpl-3 [expanded from: gpl (≥ 2)]' => 'GPL-2.0+',
       'gpl-2 | gpl-3' => 'GPL-2.0+',
       'gplv2 or later' => 'GPL-2.0+',
-      'gplv3' => 'GPL-3.0',
-      'gpl3' => 'GPL-3.0',
-      'gpl 3' => 'GPL-3.0',
-      'gpl_3' => 'GPL-3.0',
-      'gpl v3' => 'GPL-3.0',
-      'gpl 3.0' => 'GPL-3.0',
-      'gpl-3' => 'GPL-3.0',
-      'gpl30' => 'GPL-3.0',
       'the gpl v3' => 'GPL-3.0',
-      'gpl v3+' => 'GPL-3.0+',
       'gpl (≥ 3)' => 'GPL-3.0+',
-      'gplv3+' => 'GPL-3.0+',
       'mpl2.0' => 'mpl-2.0',
       'mpl1' => 'mpl-1.0',
       'mpl1.0' => 'mpl-1.0',
@@ -92,20 +79,13 @@ module Spdx
       'new bsd license (gpl-compatible)' => 'BSD-3-Clause',
       'public domain' => 'Unlicense',
       'cc0' => 'CC0-1.0',
-      'lgpl v3' => 'LGPL-3.0',
       'artistic_2' => 'Artistic-2.0',
       'artistic_1' => 'Artistic-1.0',
-      'lgpl 2.1' => 'LGPL-2.1',
-      'lgpl' => 'LGPL-3.0',
-      'lgplv2.1+' => 'LGPL-2.1+',
-      'lgplv3' => 'LGPL-3.0',
       'alv2' => 'Apache-2.0',
       'asl 2.0' => 'Apache-2.0',
       'mpl 2.0' => 'MPL-2.0',
-      'agplv3' => 'AGPL-3.0',
       'publicdomain' => 'Unlicense',
       'unlicensed' => 'Unlicense',
-      'lgpl-3' => 'LGPL-3.0',
       'psfl' => 'Python-2.0',
       'psf' => 'Python-2.0',
       'asl2' => 'Apache-2.0',
@@ -116,20 +96,9 @@ module Spdx
       'ZPL 1.1' => 'ZPL-1.1',
       'ZPL 2.0' => 'ZPL-2.0',
       'ZPL 2.1' => 'ZPL-2.1',
-      'lgplv2' => 'LGPL-2.0',
-      'lgplv2+' => 'LGPL-2.0+',
-      'lgplv2.1' => 'LGPL-2.1',
       'lgpl_2_1' => 'LGPL-2.1',
       'lgpl_v2_1' => 'LGPL-2.1',
-      'lgpl v2.1+' => 'LGPL-2.1+',
-      'lgplv3+' => 'LGPL-3.0+',
-      'lgpl 3.0' => 'LGPL-3.0',
-      'lgpl 3' => 'LGPL-3.0',
-      'lgpl3' => 'LGPL-3.0',
       'lgpl version 3' => 'LGPL-3.0',
-      'agpl3' => 'AGPL-3.0',
-      'agpl-3' => 'AGPL-3.0',
-      'agpl3+' => 'AGPL-3.0+',
       'cc by-sa 4.0' => 'CC-BY-SA-4.0',
       'cc by-nc-sa 3.0' => 'CC-BY-NC-SA-3.0',
       'cc by-sa 3.0' => 'CC-BY-SA-3.0',

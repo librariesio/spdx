@@ -69,6 +69,21 @@ describe Spdx do
       expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to eq('GNU Lesser General Public License v2.1 or later')
       expect(Spdx.find('New BSD License').name).to eq('BSD 3-clause "New" or "Revised" License')
       expect(Spdx.find('(MIT OR X11) ').name).to eq('MIT License')
+      expect(Spdx.find('mit-license').name).to eq('MIT License')
+      expect(Spdx.find('lgpl-3').name).to eq('GNU Lesser General Public License v3.0 only')
+      expect(Spdx.find('agpl-3').name).to eq('GNU Affero General Public License v3.0')
+      expect(Spdx.find('cc by-sa 4.0').name).to eq('Creative Commons Attribution Share Alike 4.0')
+      expect(Spdx.find('cc by-nc-sa 3.0').name).to eq('Creative Commons Attribution Non Commercial Share Alike 3.0')
+      expect(Spdx.find('cc by-sa 3.0').name).to eq('Creative Commons Attribution Share Alike 3.0')
+      expect(Spdx.find('gpl_1').name).to eq('GNU General Public License v1.0 only')
+      expect(Spdx.find('gpl_2').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('gpl_3').name).to eq('GNU General Public License v3.0 only')
+      expect(Spdx.find('artistic_2').name).to eq('Artistic License 2.0')
+      expect(Spdx.find('artistic_1').name).to eq('Artistic License 1.0')
+      expect(Spdx.find('apache_2_0').name).to eq('Apache License 2.0')
+      expect(Spdx.find('apache_v2').name).to eq('Apache License 2.0')
+      expect(Spdx.find('lgpl_2_1').name).to eq('GNU Lesser General Public License v2.1 only')
+      expect(Spdx.find('lgpl_v2_1').name).to eq('GNU Lesser General Public License v2.1 only')
     end
   end
 end

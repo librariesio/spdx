@@ -34,7 +34,7 @@ module Spdx
   end
 
   def self.stop_words
-    %w(version software the or right)
+    %w(version software the or right all)
   end
 
   def self.find_by_name(name)

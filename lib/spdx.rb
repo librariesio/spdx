@@ -4,7 +4,6 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    name = name.downcase
     lookup(name) || find_by_special_case(name) || closest(name)
   end
 

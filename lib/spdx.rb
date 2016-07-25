@@ -9,7 +9,7 @@ module Spdx
 
   def self.lookup(name)
     return false if name.nil?
-    return SpdxLicenses[name] if SpdxLicenses[name]
+    return SpdxLicenses[name] if SpdxLicenses.exist?(name)
     lowercase = SpdxLicenses.data.keys.find{|k| k.downcase == name.downcase }
     SpdxLicenses[lowercase] if lowercase
   end

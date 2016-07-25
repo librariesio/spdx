@@ -15,8 +15,8 @@ module Spdx
   end
 
   def self.closest(name)
-    name = name.gsub(/#{stop_words.join('|')}/i, '')
-    name = name.gsub(/(\d)/, ' \1 ')
+    name.gsub!(/#{stop_words.join('|')}/i, '')
+    name.gsub!(/(\d)/, ' \1 ')
     best_match = fuzzy_match(name)
     return nil unless best_match
     lookup(best_match) || find_by_name(best_match)

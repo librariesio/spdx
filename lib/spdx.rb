@@ -4,7 +4,7 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    lookup(name) || find_by_special_case(name) || closest(name)
+    lookup(name.strip) || find_by_special_case(name.strip) || closest(name.strip)
   end
 
   def self.lookup(name)
@@ -115,7 +115,11 @@ module Spdx
       '2-clause bsdl' => 'BSD-2-clause',
       '3-clause bsdl' => 'BSD-3-clause',
       '2-clause bsd' => 'BSD-2-clause',
-      '3-clause bsd' => 'BSD-3-clause'
+      '3-clause bsd' => 'BSD-3-clause',
+      "bsd 3-clause" => 'BSD-3-clause',
+      "bsd 2-clause" => 'BSD-2-clause',
+      "two-clause bsd-style license" => 'BSD-2-clause',
+      "bsd style" => 'BSD-3-clause'
     }
   end
 

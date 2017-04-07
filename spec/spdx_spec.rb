@@ -32,6 +32,10 @@ describe Spdx do
       expect(Spdx.find('UNLICENSE').name).to eq("The Unlicense")
     end
 
+    it "should strip whitespace from strings before lookups" do
+      expect(Spdx.find(" BSD-3-Clause").id).to eq("BSD-3-Clause")
+    end
+
     it "should return know licenses for special cases" do
       expect(Spdx.find('MPL1').name).to eq('Mozilla Public License 1.0')
       expect(Spdx.find('MPL1.0').name).to eq('Mozilla Public License 1.0')
@@ -84,6 +88,12 @@ describe Spdx do
       expect(Spdx.find('apache_v2').name).to eq('Apache License 2.0')
       expect(Spdx.find('lgpl_2_1').name).to eq('GNU Lesser General Public License v2.1 only')
       expect(Spdx.find('lgpl_v2_1').name).to eq('GNU Lesser General Public License v2.1 only')
+
+      expect(Spdx.find("BSD 3-Clause").name).to eq("BSD 3-clause \"New\" or \"Revised\" License")
+      expect(Spdx.find("BSD 3-clause").name).to eq("BSD 3-clause \"New\" or \"Revised\" License")
+      expect(Spdx.find("BSD 2-Clause").name).to eq("BSD 2-clause \"Simplified\" License")
+      expect(Spdx.find("BSD 2-clause").name).to eq("BSD 2-clause \"Simplified\" License")
+      expect(Spdx.find("BSD Style").name).to eq("BSD 3-clause \"New\" or \"Revised\" License")
     end
   end
 end

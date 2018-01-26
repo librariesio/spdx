@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "spdx-licenses", "~> 1.0"
   spec.add_dependency "fuzzy_match", "~> 2.1"
-  spec.add_development_dependency "bundler", "~> 1.10"
+  spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 12"
-  spec.add_development_dependency "rspec", "~> 3.5.0"
+  spec.add_development_dependency "rspec", "~> 3.7"
 end

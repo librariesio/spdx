@@ -15,6 +15,10 @@ describe Spdx do
       expect(Spdx.find('Apache License 2.0').name).to eq("Apache License 2.0")
     end
 
+    it "should return nil for commercial" do
+      expect(Spdx.find('Commercial')).to be_nil
+    end
+
     it "should return nil for garbage" do
       expect(Spdx.find('foo bar baz')).to be_nil
       expect(Spdx.find('Copyright Zendesk. All Rights Reserved.')).to be_nil

@@ -4,7 +4,19 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    lookup(name.strip) || find_by_special_case(name.strip) || closest(name.strip)
+    name.strip!
+    return nil if commercial?(name)
+    search(name)
+  end
+
+  def self.search(name)
+    lookup(name) ||
+    find_by_special_case(name) ||
+    closest(name)
+  end
+
+  def self.commercial?(name)
+    name.downcase == 'commercial'
   end
 
   def self.lookup(name)

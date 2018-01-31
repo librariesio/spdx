@@ -4,7 +4,7 @@ require "fuzzy_match"
 
 module Spdx
   def self.find(name)
-    name.strip!
+    name = name.strip
     return nil if commercial?(name)
     search(name)
   end

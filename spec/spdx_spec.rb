@@ -98,6 +98,8 @@ describe Spdx do
       expect(Spdx.find("BSD 2-Clause").name).to eq("BSD 2-clause \"Simplified\" License")
       expect(Spdx.find("BSD 2-clause").name).to eq("BSD 2-clause \"Simplified\" License")
       expect(Spdx.find("BSD Style").name).to eq("BSD 3-clause \"New\" or \"Revised\" License")
+
+      expect(Spdx.find("GNU LGPL v3+").name).to eq("GNU Lesser General Public License v3.0 only")
     end
   end
 end

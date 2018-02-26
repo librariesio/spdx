@@ -110,6 +110,7 @@ module Spdx
       'lgpl_2_1' => 'LGPL-2.1',
       'lgpl_v2_1' => 'LGPL-2.1',
       'lgpl version 3' => 'LGPL-3.0',
+      'gnu lgpl v3+' => 'LGPL-3.0',
       'cc by-sa 4.0' => 'CC-BY-SA-4.0',
       'cc by-nc-sa 3.0' => 'CC-BY-NC-SA-3.0',
       'cc by-sa 3.0' => 'CC-BY-SA-3.0',

@@ -1,8 +1,11 @@
 language: ruby
 rvm:
-  - 2.4.2
-  - 2.5.0
+- 2.4.2
+- 2.5.0
 cache: bundler
 sudo: false
 before_install:
-  - gem update --system
+- gem update --system
+notifications:
+  slack:
+    secure: Peh2ABalhVqVbHXxpEEIyjdp2zbtUFaL0rS7ZFq5+yly70nbsIGrx4vYWzz1Vfa6QQEFUAlchuOyF3Xou/ug8sM1FSTwWfvtKbF4pJV+z3RnaXxbVWGEGQX7FYVPKM3Eg2T2zOL9fncl6yoEEkb4nAHm6iKmBqrT6hCHzQq0N94=

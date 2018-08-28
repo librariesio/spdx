@@ -70,6 +70,7 @@ module Spdx
       'perl_5' => 'Artistic-1.0-Perl',
       'bsd3' => 'BSD-3-Clause',
       'bsd' => 'BSD-3-Clause',
+      'bsd license' => 'BSD-3-Clause',
       'new bsd license' => 'BSD-3-Clause',
       'gpl' => 'GPL-2.0+',
       'gpl-2 | gpl-3 [expanded from: gpl (≥ 2.0)]' => 'GPL-2.0+',

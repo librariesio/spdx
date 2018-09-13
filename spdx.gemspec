@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "spdx-licenses", "~> 1.0"
+  spec.add_dependency "spdx-licenses", "~> 1.2"
   spec.add_dependency "fuzzy_match", "~> 2.1"
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 12"

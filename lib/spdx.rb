@@ -1,28 +1,31 @@
-require "spdx/version"
-require "spdx-licenses"
-require "fuzzy_match"
+require 'spdx/version'
+require 'spdx-licenses'
+require 'fuzzy_match'
 
-module Spdx
+# Fuzzy matcher for licenses to SPDX standard licenses
+module Spdx # rubocop:disable Metrics/ModuleLength
   def self.find(name)
     name = name.strip
     return nil if commercial?(name)
+
     search(name)
   end
 
   def self.search(name)
     lookup(name) ||
-    find_by_special_case(name) ||
-    closest(name)
+      find_by_special_case(name) ||
+      closest(name)
   end
 
   def self.commercial?(name)
-    name.downcase == 'commercial'
+    name.casecmp('commercial').zero?
   end
 
   def self.lookup(name)
     return false if name.nil?
     return SpdxLicenses[name] if SpdxLicenses.exist?(name)
-    lowercase = SpdxLicenses.data.keys.find{|k| k.downcase == name.downcase }
+
+    lowercase = SpdxLicenses.data.keys.find { |k| k.casecmp(name).zero? }
     SpdxLicenses[lowercase] if lowercase
   end
 
@@ -31,13 +34,14 @@ module Spdx
     name.gsub!(/(\d)/, ' \1 ')
     best_match = fuzzy_match(name)
     return nil unless best_match
+
     lookup(best_match) || find_by_name(best_match)
   end
 
   def self.matches(name, max_distance = 40)
     names.map { |key| [key, Text::Levenshtein.distance(name, key)] }
-      .select { |arr| arr[1] <= max_distance }
-      .sort_by { |arr| arr[1] }
+         .select { |arr| arr[1] <= max_distance }
+         .sort_by { |arr| arr[1] }
   end
 
   def self.fuzzy_match(name)
@@ -45,27 +49,29 @@ module Spdx
   end
 
   def self.stop_words
-    %w(version software the or right all)
+    %w[version software the or right all]
   end
 
   def self.find_by_name(name)
-    match = SpdxLicenses.data.find{|k,v| v['name'] == name }
+    match = SpdxLicenses.data.find { |_k, v| v['name'] == name }
     lookup(match[0]) if match
   end
 
   def self.find_by_special_case(name)
     gpl = gpl_match(name)
     return gpl if gpl
+
     lookup(special_cases[name.downcase.strip])
   end
 
   def self.gpl_match(name)
     match = name.match(/^(l|a)?gpl-?\s?_?v?(1|2|3)\.?(\d)?(\+)?$/i)
     return unless match
+
     lookup "#{match[1]}GPL-#{match[2]}.#{match[3] || 0}#{match[4]}"
   end
 
-  def self.special_cases
+  def self.special_cases # rubocop:disable Metrics/MethodLength
     {
       'perl_5' => 'Artistic-1.0-Perl',
       'bsd3' => 'BSD-3-Clause',
@@ -86,7 +92,7 @@ module Spdx
       'mpl1.0' => 'mpl-1.0',
       'mpl1.1' => 'mpl-1.1',
       'mpl2' => 'mpl-2.0',
-      "gnu lesser general public license" => 'LGPL-2.1+',
+      'gnu lesser general public license' => 'LGPL-2.1+',
       'lgplv2 or later' => 'LGPL-2.1+',
       'gpl2 w/ cpe' => 'GPL-2.0-with-classpath-exception',
       'new bsd license (gpl-compatible)' => 'BSD-3-Clause',
@@ -132,14 +138,14 @@ module Spdx
       '3-clause bsdl' => 'BSD-3-clause',
       '2-clause bsd' => 'BSD-2-clause',
       '3-clause bsd' => 'BSD-3-clause',
-      "bsd 3-clause" => 'BSD-3-clause',
-      "bsd 2-clause" => 'BSD-2-clause',
-      "two-clause bsd-style license" => 'BSD-2-clause',
-      "bsd style" => 'BSD-3-clause'
+      'bsd 3-clause' => 'BSD-3-clause',
+      'bsd 2-clause' => 'BSD-2-clause',
+      'two-clause bsd-style license' => 'BSD-2-clause',
+      'bsd style' => 'BSD-3-clause'
     }
   end
 
   def self.names
-    SpdxLicenses.data.keys + SpdxLicenses.data.map{|k,v| v['name'] }
+    SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v['name'] }
   end
 end

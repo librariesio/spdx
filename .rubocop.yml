@@ -1,0 +1,17 @@
+AllCops:
+  TargetRubyVersion: 2.4
+
+Metrics/BlockLength:
+  Max: 125
+  Exclude:
+    - spec/**/*_spec.rb
+
+# It's 2019, allow longer line lengths
+Metrics/LineLength:
+  Max: 120
+
+Metrics/AbcSize:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: False

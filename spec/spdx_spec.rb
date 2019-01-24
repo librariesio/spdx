@@ -2,45 +2,46 @@ require 'spec_helper'
 
 describe Spdx do
   describe 'find' do
-    it "should return know license from short code" do
-      expect(Spdx.find('Apache-2.0').name).to eq("Apache License 2.0")
+    it 'should return know license from short code' do
+      expect(Spdx.find('Apache-2.0').name).to eq('Apache License 2.0')
     end
 
-    it "should work with case-insentive short codes" do
-      expect(Spdx.find('apache-2.0').name).to eq("Apache License 2.0")
-      expect(Spdx.find('agpl-3.0').name).to eq("GNU Affero General Public License v3.0")
+    it 'should work with case-insentive short codes' do
+      expect(Spdx.find('apache-2.0').name).to eq('Apache License 2.0')
+      expect(Spdx.find('agpl-3.0').name).to eq('GNU Affero General Public License v3.0')
     end
 
-    it "should return know license from full name" do
-      expect(Spdx.find('Apache License 2.0').name).to eq("Apache License 2.0")
+    it 'should return know license from full name' do
+      expect(Spdx.find('Apache License 2.0').name).to eq('Apache License 2.0')
     end
 
-    it "should return nil for commercial" do
+    it 'should return nil for commercial' do
       expect(Spdx.find('Commercial')).to be_nil
     end
 
-    it "should return nil for garbage" do
+    it 'should return nil for garbage' do
       expect(Spdx.find('foo bar baz')).to be_nil
       expect(Spdx.find('Copyright Zendesk. All Rights Reserved.')).to be_nil
       expect(Spdx.find('https://github.com/AuthorizeNet/sdk-ruby/blob/master/license.txt')).to be_nil
     end
 
-    it "should return know license from an alias" do
-      expect(Spdx.find('The Apache Software License, Version 2.0').name).to eq("Apache License 2.0")
-      expect(Spdx.find('Apache 2.0').name).to eq("Apache License 2.0")
-      expect(Spdx.find('Apache2').name).to eq("Apache License 2.0")
-      expect(Spdx.find('Apache License, Version 2.0').name).to eq("Apache License 2.0")
-      expect(Spdx.find('Educational Community License, Version 2.0').name).to eq("Educational Community License v2.0")
-      expect(Spdx.find('CDDL + GPLv2 with classpath exception').name).to eq("GNU General Public License v2.0 w/Classpath exception")
-      expect(Spdx.find('The MIT License').name).to eq("MIT License")
-      expect(Spdx.find('UNLICENSE').name).to eq("The Unlicense")
+    it 'should return know license from an alias' do
+      expect(Spdx.find('The Apache Software License, Version 2.0').name).to eq('Apache License 2.0')
+      expect(Spdx.find('Apache 2.0').name).to eq('Apache License 2.0')
+      expect(Spdx.find('Apache2').name).to eq('Apache License 2.0')
+      expect(Spdx.find('Apache License, Version 2.0').name).to eq('Apache License 2.0')
+      expect(Spdx.find('Educational Community License, Version 2.0').name).to eq('Educational Community License v2.0')
+      expect(Spdx.find('CDDL + GPLv2 with classpath exception').name).to \
+        eq('GNU General Public License v2.0 w/Classpath exception')
+      expect(Spdx.find('The MIT License').name).to eq('MIT License')
+      expect(Spdx.find('UNLICENSE').name).to eq('The Unlicense')
     end
 
-    it "should strip whitespace from strings before lookups" do
-      expect(Spdx.find(" BSD-3-Clause").id).to eq("BSD-3-Clause")
+    it 'should strip whitespace from strings before lookups' do
+      expect(Spdx.find(' BSD-3-Clause').id).to eq('BSD-3-Clause')
     end
 
-    it "should return know licenses for special cases" do
+    it 'should return know licenses for special cases' do
       expect(Spdx.find('MPL1').name).to eq('Mozilla Public License 1.0')
       expect(Spdx.find('MPL1.0').name).to eq('Mozilla Public License 1.0')
       expect(Spdx.find('MPL1.1').name).to eq('Mozilla Public License 1.1')
@@ -51,21 +52,24 @@ describe Spdx do
       expect(Spdx.find('GPL3').name).to eq('GNU General Public License v3.0 only')
       expect(Spdx.find('GPL 3.0').name).to eq('GNU General Public License v3.0 only')
       expect(Spdx.find('GPL-3').name).to eq('GNU General Public License v3.0 only')
-      expect(Spdx.find('GPL-2 | GPL-3 [expanded from: GPL (≥ 2)]').name).to eq('GNU General Public License v2.0 or later')
-      expect(Spdx.find('GPL-2 | GPL-3 [expanded from: GPL]').name).to eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GPL-2 | GPL-3 [expanded from: GPL (≥ 2)]').name).to \
+        eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GPL-2 | GPL-3 [expanded from: GPL]').name).to \
+        eq('GNU General Public License v2.0 or later')
       expect(Spdx.find('GPL (≥ 3)').name).to eq('GNU General Public License v3.0 or later')
       expect(Spdx.find('gpl30').name).to eq('GNU General Public License v3.0 only')
-      expect(Spdx.find("GPL v2+").name).to eq('GNU General Public License v2.0 or later')
-      expect(Spdx.find("GPL 2").name).to eq('GNU General Public License v2.0 only')
-      expect(Spdx.find("GPL v2").name).to eq('GNU General Public License v2.0 only')
-      expect(Spdx.find("GPL2").name).to eq('GNU General Public License v2.0 only')
-      expect(Spdx.find("GPL-2 | GPL-3").name).to eq('GNU General Public License v2.0 or later')
-      expect(Spdx.find("GPL-2 | GPL-3 [expanded from: GPL (≥ 2.0)]").name).to eq('GNU General Public License v2.0 or later')
-      expect(Spdx.find("GPL2 w/ CPE").name).to eq('GNU General Public License v2.0 w/Classpath exception')
-      expect(Spdx.find("GPL 2.0").name).to eq('GNU General Public License v2.0 only')
-      expect(Spdx.find("New BSD License (GPL-compatible)").name).to eq('BSD 3-Clause "New" or "Revised" License')
-      expect(Spdx.find("The GPL V3").name).to eq('GNU General Public License v3.0 only')
-      expect(Spdx.find('perl_5').name).to eq("Artistic License 1.0 (Perl)")
+      expect(Spdx.find('GPL v2+').name).to eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GPL 2').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('GPL v2').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('GPL2').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('GPL-2 | GPL-3').name).to eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GPL-2 | GPL-3 [expanded from: GPL (≥ 2.0)]').name).to \
+        eq('GNU General Public License v2.0 or later')
+      expect(Spdx.find('GPL2 w/ CPE').name).to eq('GNU General Public License v2.0 w/Classpath exception')
+      expect(Spdx.find('GPL 2.0').name).to eq('GNU General Public License v2.0 only')
+      expect(Spdx.find('New BSD License (GPL-compatible)').name).to eq('BSD 3-Clause "New" or "Revised" License')
+      expect(Spdx.find('The GPL V3').name).to eq('GNU General Public License v3.0 only')
+      expect(Spdx.find('perl_5').name).to eq('Artistic License 1.0 (Perl)')
       expect(Spdx.find('BSD3').name).to eq('BSD 3-Clause "New" or "Revised" License')
       expect(Spdx.find('BSD').name).to eq('BSD 3-Clause "New" or "Revised" License')
       expect(Spdx.find('GPLv3').name).to eq('GNU General Public License v3.0 only')
@@ -74,14 +78,16 @@ describe Spdx do
       expect(Spdx.find('Public Domain').name).to eq('The Unlicense')
       expect(Spdx.find('GPL-2').name).to eq('GNU General Public License v2.0 only')
       expect(Spdx.find('GPL').name).to eq('GNU General Public License v2.0 or later')
-      expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to eq('GNU Library General Public License v2.1 or later')
+      expect(Spdx.find('GNU LESSER GENERAL PUBLIC LICENSE').name).to \
+        eq('GNU Library General Public License v2.1 or later')
       expect(Spdx.find('New BSD License').name).to eq('BSD 3-Clause "New" or "Revised" License')
       expect(Spdx.find('(MIT OR X11) ').name).to eq('MIT License')
       expect(Spdx.find('mit-license').name).to eq('MIT License')
       expect(Spdx.find('lgpl-3').name).to eq('GNU Lesser General Public License v3.0 only')
       expect(Spdx.find('agpl-3').name).to eq('GNU Affero General Public License v3.0')
       expect(Spdx.find('cc by-sa 4.0').name).to eq('Creative Commons Attribution Share Alike 4.0 International')
-      expect(Spdx.find('cc by-nc-sa 3.0').name).to eq('Creative Commons Attribution Non Commercial Share Alike 3.0 Unported')
+      expect(Spdx.find('cc by-nc-sa 3.0').name).to \
+        eq('Creative Commons Attribution Non Commercial Share Alike 3.0 Unported')
       expect(Spdx.find('cc by-sa 3.0').name).to eq('Creative Commons Attribution Share Alike 3.0 Unported')
       expect(Spdx.find('gpl_1').name).to eq('GNU General Public License v1.0 only')
       expect(Spdx.find('gpl_2').name).to eq('GNU General Public License v2.0 only')
@@ -93,14 +99,14 @@ describe Spdx do
       expect(Spdx.find('lgpl_2_1').name).to eq('GNU Lesser General Public License v2.1 only')
       expect(Spdx.find('lgpl_v2_1').name).to eq('GNU Lesser General Public License v2.1 only')
 
-      expect(Spdx.find("BSD 3-Clause").name).to eq("BSD 3-Clause \"New\" or \"Revised\" License")
-      expect(Spdx.find("BSD 3-Clause").name).to eq("BSD 3-Clause \"New\" or \"Revised\" License")
-      expect(Spdx.find("BSD 2-Clause").name).to eq("BSD 2-Clause \"Simplified\" License")
-      expect(Spdx.find("BSD 2-clause").name).to eq("BSD 2-Clause \"Simplified\" License")
-      expect(Spdx.find("BSD Style").name).to eq("BSD 3-Clause \"New\" or \"Revised\" License")
+      expect(Spdx.find('BSD 3-Clause').name).to eq('BSD 3-Clause "New" or "Revised" License')
+      expect(Spdx.find('BSD 3-Clause').name).to eq('BSD 3-Clause "New" or "Revised" License')
+      expect(Spdx.find('BSD 2-Clause').name).to eq('BSD 2-Clause "Simplified" License')
+      expect(Spdx.find('BSD 2-clause').name).to eq('BSD 2-Clause "Simplified" License')
+      expect(Spdx.find('BSD Style').name).to eq('BSD 3-Clause "New" or "Revised" License')
 
-      expect(Spdx.find("GNU LGPL v3+").name).to eq("GNU Lesser General Public License v3.0 only")
-      expect(Spdx.find("ZPL 2.1").name).to eq("Zope Public License 2.1")
+      expect(Spdx.find('GNU LGPL v3+').name).to eq('GNU Lesser General Public License v3.0 only')
+      expect(Spdx.find('ZPL 2.1').name).to eq('Zope Public License 2.1')
     end
   end
 end

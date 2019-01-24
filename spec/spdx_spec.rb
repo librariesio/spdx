@@ -41,6 +41,77 @@ describe Spdx do
       expect(Spdx.find(' BSD-3-Clause').id).to eq('BSD-3-Clause')
     end
 
+    it 'should handle pypi classifiers properly' do
+      pypi_mappings = [
+        ['Aladdin Free Public License (AFPL)', 'Aladdin'],
+        ['CC0 1.0 Universal (CC0 1.0) Public Domain Dedication', 'CC0-1.0'],
+        ['CeCILL-B Free Software License Agreement (CECILL-B)', 'CECILL-B'],
+        ['CeCILL-C Free Software License Agreement (CECILL-C)', 'CECILL-C'],
+        ['Eiffel Forum License (EFL)', 'EFL-2.0'],
+        ['Netscape Public License (NPL)', 'NPL-1.1'],
+        ['Nokia Open Source License (NOKOS)', 'Nokia'],
+        ['Academic Free License (AFL)', 'AFL-3.0'],
+        ['Apache Software License', 'Apache-2.0'],
+        ['Apple Public Source License', 'APSL-2.0'],
+        ['Artistic License', 'Artistic-2.0'],
+        ['Attribution Assurance License', 'AAL'],
+        ['Boost Software License 1.0 (BSL-1.0)', 'BSL-1.0'],
+        ['BSD License', 'BSD-3-Clause'],
+        ['Common Development and Distribution License 1.0 (CDDL-1.0)', 'CDDL-1.0'],
+        ['Common Public License', 'CPL-1.0'],
+        ['Eclipse Public License 1.0 (EPL-1.0)', 'EPL-1.0'],
+        ['Eclipse Public License 2.0 (EPL-2.0)', 'EPL-2.0'],
+        ['Eiffel Forum License', 'EFL-2.0'],
+        ['European Union Public Licence 1.0 (EUPL 1.0)', 'EUPL-1.0'],
+        ['European Union Public Licence 1.1 (EUPL 1.1)', 'EUPL-1.1'],
+        ['European Union Public Licence 1.2 (EUPL 1.2)', 'EUPL-1.2'],
+        ['GNU Affero General Public License v3', 'AGPL-3.0'],
+        ['GNU Affero General Public License v3 or later (AGPLv3+)', 'AGPL-3.0-or-later'],
+        ['GNU Free Documentation License (FDL)', 'GFDL-1.3'],
+        ['GNU General Public License (GPL)', 'GPL-2.0+'],
+        ['GNU General Public License v2 (GPLv2)', 'GPL-2.0'],
+        ['GNU General Public License v2 or later (GPLv2+)', 'GPL-2.0+'],
+        ['GNU General Public License v3 (GPLv3)', 'GPL-3.0'],
+        ['GNU General Public License v3 or later (GPLv3+)', 'GPL-3.0+'],
+        ['GNU Lesser General Public License v2 (LGPLv2)', 'LGPL-2.0'],
+        ['GNU Lesser General Public License v2 or later (LGPLv2+)', 'LGPL-2.0+'],
+        ['GNU Lesser General Public License v3 (LGPLv3)', 'LGPL-3.0'],
+        ['GNU Lesser General Public License v3 or later (LGPLv3+)', 'LGPL-3.0+'],
+        ['GNU Library or Lesser General Public License (LGPL)', 'LGPL-2.0+'],
+        ['IBM Public License', 'IPL-1.0'],
+        ['Intel Open Source License', 'Intel'],
+        ['ISC License (ISCL)', 'ISC'],
+        ['MirOS License (MirOS)', 'MirOS'],
+        ['MIT License', 'MIT'],
+        ['Motosoto License', 'Motosoto'],
+        ['Mozilla Public License 1.0 (MPL)', 'MPL-1.0'],
+        ['Mozilla Public License 1.1 (MPL 1.1)', 'MPL-1.1'],
+        ['Mozilla Public License 2.0 (MPL 2.0)', 'MPL-2.0'],
+        ['Nethack General Public License', 'NGPL'],
+        ['Nokia Open Source License', 'Nokia'],
+        ['Open Group Test Suite License', 'OGTSL'],
+        ['PostgreSQL License', 'PostgreSQL'],
+        ['Python License (CNRI Python License)', 'CNRI-Python'],
+        ['Python Software Foundation License', 'Python-2.0'],
+        ['Qt Public License (QPL)', 'QPL-1.0'],
+        ['Ricoh Source Code Public License', 'RSCPL'],
+        ['SIL Open Font License 1.1 (OFL-1.1)', 'OFL-1.1'],
+        ['Sleepycat License', 'Sleepycat'],
+        ['Sun Industry Standards Source License (SISSL)', 'SISSL-1.2'],
+        ['Sun Public License', 'SPL-1.0'],
+        ['Universal Permissive License (UPL)', 'UPL-1.0'],
+        ['University of Illinois/NCSA Open Source License', 'NCSA'],
+        ['Vovida Software License 1.0', 'VSL-1.0'],
+        ['W3C License', 'W3C'],
+        ['X.Net License', 'Xnet'],
+        ['zlib/libpng License', 'zlib-acknowledgement'],
+        ['Zope Public License', 'ZPL-2.1']
+      ]
+      pypi_mappings.each do |license, mapped|
+        expect(Spdx.find(license).id).to eq(mapped)
+      end
+    end
+
     it 'should return know licenses for special cases' do
       expect(Spdx.find('MPL1').name).to eq('Mozilla Public License 1.0')
       expect(Spdx.find('MPL1.0').name).to eq('Mozilla Public License 1.0')

@@ -25,7 +25,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
     return false if name.nil?
     return SpdxLicenses[name] if SpdxLicenses.exist?(name)
 
-    lowercase = SpdxLicenses.data.keys.find { |k| k.casecmp(name).zero? }
+    lowercase = SpdxLicenses.data.keys.sort.find { |k| k.casecmp(name).zero? }
     SpdxLicenses[lowercase] if lowercase
   end
 
@@ -141,11 +141,35 @@ module Spdx # rubocop:disable Metrics/ModuleLength
       'bsd 3-clause' => 'BSD-3-clause',
       'bsd 2-clause' => 'BSD-2-clause',
       'two-clause bsd-style license' => 'BSD-2-clause',
-      'bsd style' => 'BSD-3-clause'
+      'bsd style' => 'BSD-3-clause',
+      'cc0 1.0 universal (cc0 1.0) public domain dedication' => 'CC0-1.0',
+      'common development and distribution license 1.0 (cddl-1.0)' => 'CDDL-1.0',
+      'european union public licence 1.0 (eupl 1.0)' => 'EUPL-1.0',
+      'european union public licence 1.1 (eupl 1.1)' => 'EUPL-1.1',
+      'european union public licence 1.2 (eupl 1.2)' => 'EUPL-1.2',
+      'vovida software license 1.0' => 'VSL-1.0',
+      'w3c license' => 'W3C',
+      'zlib/libpng license' => 'zlib-acknowledgement',
+      'gnu general public license (gpl)' => 'GPL-2.0+',
+      'gnu general public license v2 (gplv2)' => 'GPL-2.0',
+      'gnu general public license v2 or later (gplv2+)' => 'GPL-2.0+',
+      'gnu general public license v3 (gplv3)' => 'GPL-3.0',
+      'gnu general public license v3 or later (gplv3+)' => 'GPL-3.0+',
+      'gnu lesser general public license v2 (lgplv2)' => 'LGPL-2.0',
+      'gnu lesser general public license v2 or later (lgplv2+)' => 'LGPL-2.0+',
+      'gnu lesser general public license v3 (lgplv3)' => 'LGPL-3.0',
+      'gnu lesser general public license v3 or later (lgplv3+)' => 'LGPL-3.0+',
+      'gnu library or lesser general public license (lgpl)' => 'LGPL-2.0+',
+      'netscape public License (npl)' => 'NPL-1.1',
+      'apache software license' => 'Apache-2.0',
+      'academic free license (afl)' => 'AFL-3.0',
+      'gnu free documentation license (fdl)' => 'GFDL-1.3',
+      'sun industry standards source license (sissl)' => 'SISSL-1.2',
+      'zope public license' => 'ZPL-2.1'
     }
   end
 
   def self.names
-    SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v['name'] }
+    (SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v['name'] }).sort
   end
 end

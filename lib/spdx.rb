@@ -7,6 +7,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
   def self.find(name)
     name = name.strip
     return nil if commercial?(name)
+    return nil if non_spdx?(name)
 
     search(name)
   end
@@ -19,6 +20,10 @@ module Spdx # rubocop:disable Metrics/ModuleLength
 
   def self.commercial?(name)
     name.casecmp('commercial').zero?
+  end
+
+  def self.non_spdx?(name)
+    ['standard pil license'].include? name.downcase
   end
 
   def self.lookup(name)

@@ -106,6 +106,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
       'artistic_2' => 'Artistic-2.0',
       'artistic_1' => 'Artistic-1.0',
       'alv2' => 'Apache-2.0',
+      'asl' => 'Apache-2.0',
       'asl 2.0' => 'Apache-2.0',
       'mpl 2.0' => 'MPL-2.0',
       'publicdomain' => 'Unlicense',

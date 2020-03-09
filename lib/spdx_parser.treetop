@@ -1,0 +1,36 @@
+
+grammar Spdx
+
+  rule compound_expression
+    '(' body ')' <CompoundExpression>
+  end
+
+  rule body
+    (compound_expression / and / or / with / license / license_exception/ space )* <Body>
+  end
+
+  rule and
+    "AND" <LogicalAnd>
+  end
+
+  rule or
+    "OR" <LogicalOr>
+  end
+
+  rule with
+    "WITH" <WithOperator>
+  end
+
+  rule license
+    [a-zA-Z0-9\-\+:\.]+ <License>
+  end
+
+  rule license_exception
+    [a-zA-Z0-9\-\+:\.]+ <LicenseException>
+  end
+
+  rule space
+    [\s]+
+  end
+
+end

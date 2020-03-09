@@ -1,6 +1,7 @@
 require 'spdx/version'
 require 'spdx-licenses'
 require 'fuzzy_match'
+require 'parser'
 
 # Fuzzy matcher for licenses to SPDX standard licenses
 module Spdx # rubocop:disable Metrics/ModuleLength
@@ -177,5 +178,24 @@ module Spdx # rubocop:disable Metrics/ModuleLength
 
   def self.names
     (SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v['name'] }).sort
+  end
+
+  def self.valid_spdx?(spdx_string)
+    eval(Parser.parse_to_ruby(spdx_string))
+    return true
+  rescue SyntaxError, Exception
+    return false
+  end
+
+  def self.can_use_with_allow?(spdx_string, allowed_licenses)
+    licenses = allowed_licenses
+    eval(Parser.parse_to_ruby(spdx_string))
+  end
+
+  def self.can_use_with_disallow?(spdx_string, disallowed_licenses)
+    possible_licenses = Parser.parse_licenses(spdx_string).to_set
+    possible_licenses.subtract(disallowed_licenses)
+    licenses = possible_licenses.to_a
+    eval(Parser.parse_to_ruby(spdx_string))
   end
 end

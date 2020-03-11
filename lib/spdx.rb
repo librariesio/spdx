@@ -31,7 +31,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
     return false if name.nil?
     return SpdxLicenses[name] if SpdxLicenses.exist?(name)
 
-    lowercase = SpdxLicenses.data.keys.sort.find { |k| k.casecmp(name).zero? }
+    lowercase = SpdxLicenses.licenses.keys.sort.find { |k| k.casecmp(name).zero? }
     SpdxLicenses[lowercase] if lowercase
   end
 
@@ -59,7 +59,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
   end
 
   def self.find_by_name(name)
-    match = SpdxLicenses.data.find { |_k, v| v['name'] == name }
+    match = SpdxLicenses.licenses.find { |_k, v| v['name'] == name }
     lookup(match[0]) if match
   end
 
@@ -177,10 +177,11 @@ module Spdx # rubocop:disable Metrics/ModuleLength
   end
 
   def self.names
-    (SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v['name'] }).sort
+    (SpdxLicenses.licenses.keys + SpdxLicenses.licenses.map { |_k, v| v['name'] }).sort
   end
 
   def self.valid_spdx?(spdx_string)
+    licenses = []
     eval(Parser.parse_to_ruby(spdx_string))
     return true
   rescue SyntaxError, Exception

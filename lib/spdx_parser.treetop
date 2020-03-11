@@ -1,4 +1,4 @@
-
+require "spdx-licenses"
 grammar Spdx
 
   rule compound_expression
@@ -22,11 +22,11 @@ grammar Spdx
   end
 
   rule license
-    [a-zA-Z0-9\-\+:\.]+ <License>
+    [a-zA-Z0-9\-\+:\.]+ &{|seq| SpdxLicenses.exist?(seq.first.text_value) } <License>
   end
 
   rule license_exception
-    [a-zA-Z0-9\-\+:\.]+ <LicenseException>
+    [a-zA-Z0-9\-\+:\.]+ &{|seq| SpdxLicenses.exception_exist?(seq.first.text_value) } <LicenseException>
   end
 
   rule space

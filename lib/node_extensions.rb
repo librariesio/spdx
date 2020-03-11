@@ -29,7 +29,6 @@ module Spdx
   end
 
   class License < Treetop::Runtime::SyntaxNode
-    # TODO: Need to validate licenses
     # TODO: Need to include with clauses
     # TODO: Need to include + values somehow
     def to_ruby
@@ -39,6 +38,10 @@ module Spdx
     def get_licenses
       self.text_value
     end
+  end
+
+  class LicenseException < Treetop::Runtime::SyntaxNode
+    # TODO: actually do license exceptions
   end
 
   class Body < Treetop::Runtime::SyntaxNode

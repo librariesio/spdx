@@ -1,11 +1,12 @@
 require 'treetop'
 require 'set'
 
-require File.expand_path(File.join(File.dirname(__FILE__), 'node_extensions.rb'))
+require_relative "node_extensions"
 
 class Parser
 
   Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'spdx_parser.treetop')))
+
   @@parser = SpdxParser.new
 
   def self.parse_to_ruby(data)

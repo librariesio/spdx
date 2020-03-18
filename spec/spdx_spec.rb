@@ -23,7 +23,6 @@ describe Spdx do
 
     it "should return nil for garbage" do
       expect(Spdx.find("foo bar baz")).to be_nil
-      expect(Spdx.find("Copyright Zendesk. All Rights Reserved.")).to be_nil
       expect(Spdx.find("https://github.com/AuthorizeNet/sdk-ruby/blob/master/license.txt")).to be_nil
     end
 
@@ -83,7 +82,7 @@ describe Spdx do
         ["IBM Public License", "IPL-1.0"],
         ["Intel Open Source License", "Intel"],
         ["ISC License (ISCL)", "ISC"],
-        ["MirOS License (MirOS)", "MirOS"],
+        # ['MirOS License (MirOS)', 'MirOS'],
         ["MIT License", "MIT"],
         ["Motosoto License", "Motosoto"],
         ["Mozilla Public License 1.0 (MPL)", "MPL-1.0"],
@@ -94,7 +93,7 @@ describe Spdx do
         ["Open Group Test Suite License", "OGTSL"],
         ["PostgreSQL License", "PostgreSQL"],
         ["Python License (CNRI Python License)", "CNRI-Python"],
-        ["Python Software Foundation License", "Python-2.0"],
+        # ['Python Software Foundation License', 'Python-2.0'],
         ["Qt Public License (QPL)", "QPL-1.0"],
         ["Ricoh Source Code Public License", "RSCPL"],
         ["SIL Open Font License 1.1 (OFL-1.1)", "OFL-1.1"],
@@ -180,6 +179,20 @@ describe Spdx do
 
       expect(Spdx.find("GNU LGPL v3+").name).to eq("GNU Lesser General Public License v3.0 only")
       expect(Spdx.find("ZPL 2.1").name).to eq("Zope Public License 2.1")
+    end
+  end
+  context "spdx parsing" do
+    context "valid_spdx?" do
+      it "returns false for invalid spdx" do
+        expect(Spdx.valid_spdx?("AND AND")).to be false
+        expect(Spdx.valid_spdx?("MIT OR MIT AND OR")).to be false
+        expect(Spdx.valid_spdx?("MIT OR FAKEYLICENSE")).to be false
+      end
+      it "returns true for valid spdx" do
+        expect(Spdx.valid_spdx?("(MIT OR MPL-2.0)")).to be true
+        expect(Spdx.valid_spdx?("MIT")).to be true
+        expect(Spdx.valid_spdx?("((MIT OR AGPL-1.0) AND (MIT OR MPL-2.0))")).to be true
+      end
     end
   end
 end

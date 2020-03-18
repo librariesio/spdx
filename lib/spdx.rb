@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require "spdx/version"
-require "spdx-licenses"
 require "fuzzy_match"
+require "spdx_parser"
+require "json"
+require_relative "exception"
+require_relative "license"
 
 # Fuzzy matcher for licenses to SPDX standard licenses
 module Spdx
@@ -30,10 +33,10 @@ module Spdx
 
   def self.lookup(name)
     return false if name.nil?
-    return SpdxLicenses[name] if SpdxLicenses.exist?(name)
+    return lookup_license(name) if license_exists?(name)
 
-    lowercase = SpdxLicenses.data.keys.sort.find { |k| k.casecmp(name).zero? }
-    SpdxLicenses[lowercase] if lowercase
+    lowercase = licenses.keys.sort.find { |k| k.casecmp(name).zero? }
+    lookup_license(lowercase) if lowercase
   end
 
   def self.closest(name)
@@ -60,7 +63,7 @@ module Spdx
   end
 
   def self.find_by_name(name)
-    match = SpdxLicenses.data.find { |_k, v| v["name"] == name }
+    match = licenses.find { |_k, v| v["name"] == name }
     lookup(match[0]) if match
   end
 
@@ -178,6 +181,59 @@ module Spdx
   end
 
   def self.names
-    (SpdxLicenses.data.keys + SpdxLicenses.data.map { |_k, v| v["name"] }).sort
+    (licenses.keys + licenses.map { |_k, v| v["name"] }).sort
+  end
+
+  def self.exceptions
+    unless defined?(@exceptions)
+      data = JSON.parse(File.read(File.expand_path("../exceptions.json", __dir__)))
+      @exceptions = {}
+      data["exceptions"].each do |details|
+        id = details.delete("licenseExceptionId")
+        @exceptions[id] = details
+      end
+    end
+    @exceptions
+  end
+
+  def self.license_exists?(id)
+    licenses.key?(id.to_s)
+  end
+
+  def self.lookup_license(id)
+    json = licenses[id.to_s]
+    Spdx::License.new(id.to_s, json["name"], json["isOsiApproved"]) if json
+  end
+
+  def self.lookup_exception(id)
+    json = exceptions[id.to_s]
+    Spdx::Exception.new(id.to_s, json["name"], json["isDeprecatedLicenseId"]) if json
+  end
+
+  def self.exception_exists?(id)
+    exceptions.has_key(id.to_s)
+  end
+
+  def self.licenses
+    unless defined?(@licenses)
+      data = JSON.parse(File.read(File.expand_path("../licenses.json", __dir__)))
+      @licenses = {}
+      data["licenses"].each do |details|
+        id = details.delete("licenseId")
+        @licenses[id] = details
+      end
+    end
+    @licenses
+  end
+
+  def self.valid_spdx?(spdx_string)
+    SpdxParser.parse(spdx_string)
+    true
+  rescue SpdxGrammar::SpdxParseError
+    false
+  end
+
+  def self.parse_spdx(spdx_string)
+    SpdxParser.parse(spdx_string)
   end
 end

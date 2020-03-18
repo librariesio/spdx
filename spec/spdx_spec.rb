@@ -186,7 +186,7 @@ describe Spdx do
       it "returns false for invalid spdx" do
         expect(Spdx.valid_spdx?("AND AND")).to be false
         expect(Spdx.valid_spdx?("MIT OR MIT AND OR")).to be false
-        expect(Spdx.valid_spdx?("MIT OR AGPL")).to be false
+        expect(Spdx.valid_spdx?("MIT OR FAKEYLICENSE")).to be false
       end
       it "returns true for valid spdx" do
         expect(Spdx.valid_spdx?("(MIT OR MPL-2.0)")).to be true

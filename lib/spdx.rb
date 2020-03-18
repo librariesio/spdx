@@ -1,7 +1,9 @@
 require 'spdx/version'
-require 'spdx-licenses'
 require 'fuzzy_match'
 require 'parser'
+require 'json'
+require_relative 'exception'
+require_relative 'license'
 
 # Fuzzy matcher for licenses to SPDX standard licenses
 module Spdx # rubocop:disable Metrics/ModuleLength
@@ -29,10 +31,10 @@ module Spdx # rubocop:disable Metrics/ModuleLength
 
   def self.lookup(name)
     return false if name.nil?
-    return SpdxLicenses[name] if SpdxLicenses.exist?(name)
+    return lookup_license(name) if license_exists?(name)
 
-    lowercase = SpdxLicenses.licenses.keys.sort.find { |k| k.casecmp(name).zero? }
-    SpdxLicenses[lowercase] if lowercase
+    lowercase = licenses.keys.sort.find { |k| k.casecmp(name).zero? }
+    lookup_license(lowercase) if lowercase
   end
 
   def self.closest(name)
@@ -59,7 +61,7 @@ module Spdx # rubocop:disable Metrics/ModuleLength
   end
 
   def self.find_by_name(name)
-    match = SpdxLicenses.licenses.find { |_k, v| v['name'] == name }
+    match = licenses.find { |_k, v| v['name'] == name }
     lookup(match[0]) if match
   end
 
@@ -177,26 +179,60 @@ module Spdx # rubocop:disable Metrics/ModuleLength
   end
 
   def self.names
-    (SpdxLicenses.licenses.keys + SpdxLicenses.licenses.map { |_k, v| v['name'] }).sort
+    (licenses.keys + licenses.map { |_k, v| v['name'] }).sort
+  end
+
+  def self.exceptions
+    unless defined?(@@exceptions)
+      data = JSON.load(File.read(File.expand_path('../../exceptions.json', __FILE__)))
+      @@exceptions = {}
+      data['exceptions'].each do |details|
+        id = details.delete('licenseExceptionId')
+        @@exceptions[id] = details
+      end
+    end
+    @@exceptions
+  end
+
+  def self.license_exists?(id)
+    licenses.has_key?(id.to_s)
+  end
+
+  def self.lookup_license(id)
+    json = licenses[id.to_s]
+    Spdx::License.new(id.to_s, json['name'], json['isOsiApproved']) if json
+  end
+
+  def self.lookup_exception(id)
+    json = exceptions[id.to_s]
+    Spdx::Exception.new(id.to_s, json['name'], json['isDeprecatedLicenseId']) if json
+  end
+
+  def self.exception_exists?(id)
+    exceptions.has_key(id.to_s)
+  end
+
+  def self.licenses
+    unless defined?(@@licenses)
+      data = JSON.load(File.read(File.expand_path('../../licenses.json', __FILE__)))
+      @@licenses = {}
+      data['licenses'].each do |details|
+        id = details.delete('licenseId')
+        @@licenses[id] = details
+      end
+    end
+    @@licenses
   end
 
   def self.valid_spdx?(spdx_string)
     licenses = []
-    eval(Parser.parse_to_ruby(spdx_string))
+    Parser.parse(spdx_string)
     return true
-  rescue SyntaxError, Exception
+  rescue SpdxGrammar::SpdxParseError
     return false
   end
 
-  def self.can_use_with_allow?(spdx_string, allowed_licenses)
-    licenses = allowed_licenses
-    eval(Parser.parse_to_ruby(spdx_string))
-  end
-
-  def self.can_use_with_disallow?(spdx_string, disallowed_licenses)
-    possible_licenses = Parser.parse_licenses(spdx_string).to_set
-    possible_licenses.subtract(disallowed_licenses)
-    licenses = possible_licenses.to_a
-    eval(Parser.parse_to_ruby(spdx_string))
+  def self.parse_spdx(spdx_string)
+    Parser.parse(spdx_string)
   end
 end

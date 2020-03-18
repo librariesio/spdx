@@ -1,5 +1,5 @@
 
-module Spdx
+module SpdxGrammar
   class CompoundExpression < Treetop::Runtime::SyntaxNode
     def to_ruby
       self.elements[0].to_ruby.join(" ")
@@ -54,5 +54,8 @@ module Spdx
     def get_licenses
       self.elements.map { |node| node.get_licenses if node.respond_to?(:get_licenses)}.flatten.uniq.compact
     end
+  end
+
+  class SpdxParseError < StandardError
   end
 end

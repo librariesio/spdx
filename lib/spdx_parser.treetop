@@ -1,32 +1,35 @@
-require "spdx-licenses"
-grammar Spdx
+grammar SpdxGrammar
 
   rule compound_expression
     '(' body ')' <CompoundExpression>
   end
 
   rule body
-    (compound_expression / and / or / with / license / license_exception/ space )* <Body>
+    (compound_expression / and / or / with / license / space )* <Body>
   end
 
   rule and
-    "AND" <LogicalAnd>
+    "AND" space !reserve_words <LogicalAnd>
   end
 
   rule or
-    "OR" <LogicalOr>
+    "OR" space !reserve_words <LogicalOr>
   end
 
   rule with
-    "WITH" <WithOperator>
+    "WITH" space license_exception <WithOperator>
   end
 
   rule license
-    [a-zA-Z0-9\-\+:\.]+ &{|seq| SpdxLicenses.exist?(seq.first.text_value) } <License>
+    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.license_exists?(seq.first.text_value) }  <License>
   end
 
   rule license_exception
-    [a-zA-Z0-9\-\+:\.]+ &{|seq| SpdxLicenses.exception_exist?(seq.first.text_value) } <LicenseException>
+    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.exception_exists?(seq.first.text_value) } <LicenseException>
+  end
+
+  rule reserve_words
+    "AND" / "OR" / "WITH"
   end
 
   rule space

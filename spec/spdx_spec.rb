@@ -192,27 +192,5 @@ describe Spdx do
         expect(Spdx.valid_spdx?("((MIT OR AGPL-1.0) AND (MIT OR MPL-2.0))")).to be true
       end
     end
-    context "can_use_with_allow?" do
-      it "returns true with a valid license" do
-        expect(Spdx.can_use_with_allow?("(MIT OR AGPL-1.0)", ["MIT"])).to be true
-        expect(Spdx.can_use_with_allow?("(MIT AND AGPL-1.0)", ["MIT", "AGPL-1.0"])).to be true
-        expect(Spdx.can_use_with_allow?("((MIT AND AGPL-1.0) OR (MIT AND ZPL-1.1))", ["MIT", "AGPL-1.0"])).to be true
-      end
-
-      it "returns false if no valid license can be found" do
-        expect(Spdx.can_use_with_allow?("(MIT OR AGPL-1.0)", ["ZPL-1.1"])).to be false
-        expect(Spdx.can_use_with_allow?("(MIT AND AGPL-1.0)", ["MIT"])).to be false
-        expect(Spdx.can_use_with_allow?("((MIT AND AGPL-1.0) OR (MIT AND ZPL-1.1))", ["MIT"])).to be false
-      end
-    end
-    context "can_use_with_disallow?" do
-      it "returns true if a license isn't banned" do
-        expect(Spdx.can_use_with_disallow?("(MIT OR AGPL-1.0)", ["AGPL-1.0"])).to be true
-        expect(Spdx.can_use_with_disallow?("((MIT AND AGPL-1.0) OR MIT)", ["AGPL-1.0"])).to be true
-      end
-      it "returns false if license is banned" do
-        expect(Spdx.can_use_with_disallow?("(MIT AND AGPL-1.0)", ["AGPL-1.0"])).to be false
-      end
-    end
   end
 end

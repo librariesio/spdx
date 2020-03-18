@@ -1,16 +1,16 @@
-require 'treetop'
-require 'set'
+require "treetop"
+require "set"
 
-require_relative "node_extensions"
+require_relative "spdx_grammar"
 
 class Parser
 
-  Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'spdx_parser.treetop')))
+  Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), "spdx_parser.treetop")))
 
-  @@parser = SpdxParser.new
+  @@parser = SpdxGrammarParser.new
 
-  def self.parse_to_ruby(data)
-    parse_tree(data).to_ruby
+  def self.parse(data)
+    parse_tree(data)
   end
 
   def self.parse_licenses(data)
@@ -27,7 +27,7 @@ class Parser
     tree = @@parser.parse(data)
 
     if(tree.nil?)
-      raise Exception, "Parse error at offset: #{@@parser.index}"
+      raise SpdxGrammar::SpdxParseError, "Parse error at offset: #{@@parser.index}"
     end
 
     self.clean_tree(tree)

@@ -18,9 +18,9 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'fuzzy_match', '~> 2.1'
   spec.add_dependency "treetop", "~> 1.6"
-  #spec.add_dependency 'spdx-licenses', '~> 1.2'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'rspec', '~> 3.7'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'pry'
 end

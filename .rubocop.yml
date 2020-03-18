@@ -1,17 +1,57 @@
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
 
 Metrics/BlockLength:
-  Max: 125
+  Max: 100
   Exclude:
     - spec/**/*_spec.rb
+    - spec/factories.rb
 
-# It's 2019, allow longer line lengths
-Metrics/LineLength:
-  Max: 120
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
 
+# metrics and documentation. code is complex as it needs to be,
+# and docs shouldn't be required. add them when needed.
 Metrics/AbcSize:
   Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/ParameterLists:
+  Max: 7
+Style/Documentation:
+  Enabled: false
 
-Style/FrozenStringLiteralComment:
-  Enabled: False
+# differences from standard ruby style guide.
+Style/RegexpLiteral:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Style/NumericPredicate:
+  Enabled: false
+
+# things we need to have discussions about
+Style/GuardClause:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/NumericLiterals:
+  MinDigits: 6

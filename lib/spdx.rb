@@ -227,6 +227,8 @@ module Spdx
   end
 
   def self.valid_spdx?(spdx_string)
+    return false unless spdx_string.is_a?(String)
+
     SpdxParser.parse(spdx_string)
     true
   rescue SpdxGrammar::SpdxParseError

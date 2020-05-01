@@ -1,5 +1,9 @@
 grammar SpdxGrammar
 
+  rule spdx_expression
+    compound_expression / none / no_assertion
+  end
+
   rule compound_expression
     '(' body ')' <CompoundExpression>
   end
@@ -30,6 +34,14 @@ grammar SpdxGrammar
 
   rule reserve_words
     "AND" / "OR" / "WITH"
+  end
+
+  rule none
+    "NONE" <None>
+  end
+
+  rule no_assertion
+    "NOASSERTION" <NoAssertion>
   end
 
   rule space

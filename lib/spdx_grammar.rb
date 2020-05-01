@@ -16,6 +16,12 @@ module SpdxGrammar
   class With < Treetop::Runtime::SyntaxNode
   end
 
+  class None < Treetop::Runtime::SyntaxNode
+  end
+
+  class NoAssertion < Treetop::Runtime::SyntaxNode
+  end
+
   class License < Treetop::Runtime::SyntaxNode
     def licenses
       text_value

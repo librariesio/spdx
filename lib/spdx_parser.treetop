@@ -1,7 +1,7 @@
 grammar SpdxGrammar
 
-  rule top_level_spdx
-    "NONE" / "NOASSERTION" / compound_expression
+  rule spdx_expression
+    compound_expression / none / no_assertion
   end
 
   rule compound_expression
@@ -34,6 +34,14 @@ grammar SpdxGrammar
 
   rule reserve_words
     "AND" / "OR" / "WITH"
+  end
+
+  rule none
+    "NONE" <None>
+  end
+
+  rule no_assertion
+    "NOASSERTION" <NoAssertion>
   end
 
   rule space

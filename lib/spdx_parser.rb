@@ -8,6 +8,7 @@ require_relative "spdx_grammar"
 class SpdxParser
   Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), "spdx_parser.treetop")))
 
+  SKIP_PARENS = ["NONE", "NOASSERTION", ""]
   @parser = SpdxGrammarParser.new
 
   def self.parse(data)
@@ -21,8 +22,7 @@ class SpdxParser
 
   private_class_method def self.parse_tree(data)
     # Couldn't figure out treetop to make parens optional
-    data = "(#{data})" unless data.start_with?("(") || data == "NONE" || data == "NOASSERTION"
-
+    data = "(#{data})" unless data.start_with?("(") || SKIP_PARENS.include?(data)
     tree = @parser.parse(data)
 
     raise SpdxGrammar::SpdxParseError, "Parse error at offset: #{@parser.index}" if tree.nil?

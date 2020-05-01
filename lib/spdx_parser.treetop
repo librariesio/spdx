@@ -1,5 +1,9 @@
 grammar SpdxGrammar
 
+  rule top_level_spdx
+    "NONE" / "NOASSERTION" / compound_expression
+  end
+
   rule compound_expression
     '(' body ')' <CompoundExpression>
   end

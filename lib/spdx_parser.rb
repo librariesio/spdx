@@ -21,7 +21,7 @@ class SpdxParser
 
   private_class_method def self.parse_tree(data)
     # Couldn't figure out treetop to make parens optional
-    data = "(#{data})" unless data.start_with?("(")
+    data = "(#{data})" unless data.start_with?("(") || data == "NONE" || data == "NOASSERTION"
 
     tree = @parser.parse(data)
 

@@ -208,4 +208,13 @@ describe Spdx do
       expect(Spdx.alias_exists?("FAKEALIAS")).to be false
     end
   end
+  context "licenses" do
+    it "returns a list of possible licenses" do
+      expect(Spdx.parse_spdx("MIT OR MPL-2.0").licenses).to eq ["MIT", "MPL-2.0"]
+    end
+    it "returns empty array for NONE or NOASSERTION" do
+      expect(Spdx.parse_spdx("NONE").licenses).to eq []
+      expect(Spdx.parse_spdx("NOASSERTION").licenses).to eq []
+    end
+  end
 end

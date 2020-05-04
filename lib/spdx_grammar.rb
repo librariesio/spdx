@@ -17,9 +17,15 @@ module SpdxGrammar
   end
 
   class None < Treetop::Runtime::SyntaxNode
+    def licenses
+      []
+    end
   end
 
   class NoAssertion < Treetop::Runtime::SyntaxNode
+    def licenses
+      []
+    end
   end
 
   class License < Treetop::Runtime::SyntaxNode

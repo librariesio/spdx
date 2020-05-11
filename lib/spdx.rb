@@ -118,6 +118,8 @@ module Spdx
       "unlicensed" => "Unlicense",
       "psfl" => "Python-2.0",
       "psf" => "Python-2.0",
+      "psf 2" => "Python-2.0",
+      "psf 2.0" => "Python-2.0",
       "asl2" => "Apache-2.0",
       "al2" => "Apache-2.0",
       "aslv2" => "Apache-2.0",

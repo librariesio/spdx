@@ -198,20 +198,6 @@ module Spdx
     @exceptions
   end
 
-  def self.aliases
-    @aliases = JSON.parse(File.read(File.expand_path("../aliases.json", __dir__))) unless defined?(@aliases)
-    @aliases
-  end
-
-  def self.alias_exists?(string)
-    aliases.key?(string)
-  end
-
-  def self.lookup_alias(string)
-    id = aliases[string]
-    lookup_license(id)
-  end
-
   def self.license_exists?(id)
     licenses.key?(id.to_s)
   end

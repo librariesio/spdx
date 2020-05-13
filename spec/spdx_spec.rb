@@ -201,6 +201,9 @@ describe Spdx do
         expect(Spdx.valid_spdx?("NOASSERTION")).to be true
         expect(Spdx.valid_spdx?("MIT OR NONE")).to be false
       end
+      it "returns true for + expression" do
+        expect(Spdx.valid_spdx?("AGPL-1.0+"))
+      end
     end
   end
   context "alias lookup" do

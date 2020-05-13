@@ -25,7 +25,7 @@ grammar SpdxGrammar
   end
 
   rule license
-    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.license_exists?(seq.first.text_value) }  <License>
+    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.license_exists?(seq.first.text_value) || Spdx.license_exists?(seq.first.text_value.delete_suffix('+')) }  <License>
   end
 
   rule license_exception

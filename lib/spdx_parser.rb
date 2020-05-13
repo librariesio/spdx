@@ -8,7 +8,7 @@ require_relative "spdx_grammar"
 class SpdxParser
   Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), "spdx_parser.treetop")))
 
-  SKIP_PARENS = ["NONE", "NOASSERTION", ""]
+  SKIP_PARENS = ["NONE", "NOASSERTION", ""].freeze
   @parser = SpdxGrammarParser.new
 
   def self.parse(data)

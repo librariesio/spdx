@@ -206,11 +206,6 @@ describe Spdx do
       end
     end
   end
-  context "alias lookup" do
-    it "returns false for an alias that doesn't exist" do
-      expect(Spdx.alias_exists?("FAKEALIAS")).to be false
-    end
-  end
   context "licenses" do
     it "returns a list of possible licenses" do
       expect(Spdx.parse_spdx("MIT OR MPL-2.0").licenses).to eq ["MIT", "MPL-2.0"]

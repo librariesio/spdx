@@ -188,7 +188,7 @@ module Spdx
 
   def self.exceptions
     unless defined?(@exceptions)
-      data = JSON.parse(File.read(File.expand_path("../exceptions.json", __dir__)))
+      data = JSON.parse(File.read(File.expand_path("../data/exceptions.json", __dir__)))
       @exceptions = {}
       data["exceptions"].each do |details|
         id = details.delete("licenseExceptionId")
@@ -199,7 +199,7 @@ module Spdx
   end
 
   def self.aliases
-    @aliases = JSON.parse(File.read(File.expand_path("../aliases.json", __dir__))) unless defined?(@aliases)
+    @aliases = JSON.parse(File.read(File.expand_path("../data/aliases.json", __dir__))) unless defined?(@aliases)
     @aliases
   end
 
@@ -232,7 +232,7 @@ module Spdx
 
   def self.licenses
     unless defined?(@licenses)
-      data = JSON.parse(File.read(File.expand_path("../licenses.json", __dir__)))
+      data = JSON.parse(File.read(File.expand_path("../data/licenses.json", __dir__)))
       @licenses = {}
       data["licenses"].each do |details|
         id = details.delete("licenseId")
@@ -240,6 +240,17 @@ module Spdx
       end
     end
     @licenses
+  end
+
+  def self.blue_oak
+    unless defined?(@blue_oak)
+      data = JSON.parse(File.read(File.expand_path("../data/blue-oak.json", __dir__)))
+      @blue_oak = {}
+      data["ratings"].each do |rating|
+        blue_oak[rating["name"]] = rating["licenses"].map { |item| item["id"] }
+      end
+    end
+    @blue_oak
   end
 
   def self.valid_spdx?(spdx_string)

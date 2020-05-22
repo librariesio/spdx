@@ -215,4 +215,13 @@ describe Spdx do
       expect(Spdx.parse_spdx("NOASSERTION").licenses).to eq []
     end
   end
+
+  context "exceptions" do
+    it "parses a valid spdx with expression" do
+      expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to be true
+    end
+    it "returns false for a license in the exception spot" do
+      expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH AGPL-3.0)")).to be false
+    end
+  end
 end

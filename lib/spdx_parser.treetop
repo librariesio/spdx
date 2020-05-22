@@ -21,7 +21,7 @@ grammar SpdxGrammar
   end
 
   rule with
-    "WITH" space license_exception <WithOperator>
+    "WITH" space license_exception <With>
   end
 
   rule license

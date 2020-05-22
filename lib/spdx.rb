@@ -213,7 +213,7 @@ module Spdx
   end
 
   def self.exception_exists?(id)
-    exceptions.has_key(id.to_s)
+    exceptions.key?(id.to_s)
   end
 
   def self.licenses

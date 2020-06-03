@@ -183,7 +183,7 @@ module Spdx
   end
 
   def self.names
-    (licenses.keys + licenses.map { |_k, v| v["name"] }).sort
+    licenses.map { |_k, v| v.values_at("name", "licenseId") }.flatten.sort
   end
 
   def self.exceptions
@@ -191,29 +191,28 @@ module Spdx
       data = JSON.parse(File.read(File.expand_path("../exceptions.json", __dir__)))
       @exceptions = {}
       data["exceptions"].each do |details|
-        id = details.delete("licenseExceptionId")
-        @exceptions[id] = details
+        @exceptions[details["licenseExceptionId"].downcase] = details
       end
     end
     @exceptions
   end
 
   def self.license_exists?(id)
-    licenses.key?(id.to_s)
+    licenses.key?(id.to_s.downcase)
   end
 
   def self.lookup_license(id)
-    json = licenses[id.to_s]
-    Spdx::License.new(id.to_s, json["name"], json["isOsiApproved"]) if json
+    json = licenses[id.to_s.downcase]
+    Spdx::License.new(json["licenseId"], json["name"], json["isOsiApproved"]) if json
   end
 
   def self.lookup_exception(id)
     json = exceptions[id.to_s]
-    Spdx::Exception.new(id.to_s, json["name"], json["isDeprecatedLicenseId"]) if json
+    Spdx::Exception.new(json["licenseExceptionId"], json["name"], json["isDeprecatedLicenseId"]) if json
   end
 
   def self.exception_exists?(id)
-    exceptions.key?(id.to_s)
+    exceptions.key?(id.to_s.downcase)
   end
 
   def self.licenses
@@ -221,8 +220,7 @@ module Spdx
       data = JSON.parse(File.read(File.expand_path("../licenses.json", __dir__)))
       @licenses = {}
       data["licenses"].each do |details|
-        id = details.delete("licenseId")
-        @licenses[id] = details
+        @licenses[details["licenseId"].downcase] = details
       end
     end
     @licenses

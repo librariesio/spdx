@@ -13,15 +13,15 @@ grammar SpdxGrammar
   end
 
   rule and
-    "AND" space !reserve_words <LogicalAnd>
+    "AND"i space !reserve_words <LogicalAnd>
   end
 
   rule or
-    "OR" space !reserve_words <LogicalOr>
+    "OR"i space !reserve_words <LogicalOr>
   end
 
   rule with
-    "WITH" space license_exception <With>
+    "WITH"i space license_exception <With>
   end
 
   rule license
@@ -33,7 +33,7 @@ grammar SpdxGrammar
   end
 
   rule reserve_words
-    "AND" / "OR" / "WITH"
+    "AND"i / "OR"i / "WITH"i
   end
 
   rule none

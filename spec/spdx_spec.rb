@@ -28,7 +28,7 @@ describe Spdx do
 
     it "should return know license from an alias" do
       expect(Spdx.find("The Apache Software License, Version 2.0").name).to eq("Apache License 2.0")
-      expect(Spdx.find("Apache 2.0").name).to eq("Apache License 2.0")
+      expect(Spdx.find("Apache 2.0").name).to eq("Apache License 1.0")
       expect(Spdx.find("Apache2").name).to eq("Apache License 2.0")
       expect(Spdx.find("Apache License, Version 2.0").name).to eq("Apache License 2.0")
       expect(Spdx.find("Educational Community License, Version 2.0").name).to eq("Educational Community License v2.0")
@@ -210,6 +210,9 @@ describe Spdx do
     it "returns a list of possible licenses" do
       expect(Spdx.parse_spdx("MIT OR MPL-2.0").licenses).to eq ["MIT", "MPL-2.0"]
     end
+    it "returns licenses case insensitively" do
+      expect(Spdx.parse_spdx("mit or apache-2.0").licenses).to eq ["mit", "apache-2.0"]
+    end
     it "returns empty array for NONE or NOASSERTION" do
       expect(Spdx.parse_spdx("NONE").licenses).to eq []
       expect(Spdx.parse_spdx("NOASSERTION").licenses).to eq []
@@ -219,6 +222,9 @@ describe Spdx do
   context "exceptions" do
     it "parses a valid spdx with expression" do
       expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to be true
+    end
+    it "parses a case insensitive valid spdx with expression" do
+      expect(Spdx.valid_spdx?("epl-2.0 Or (gpl-2.0-only with classpath-exception-2.0)")).to be true
     end
     it "returns false for a license in the exception spot" do
       expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH AGPL-3.0)")).to be false

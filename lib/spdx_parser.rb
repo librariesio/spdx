@@ -25,7 +25,7 @@ class SpdxParser
     data = "(#{data})" unless data.start_with?("(") || SKIP_PARENS.include?(data)
     tree = @parser.parse(data)
 
-    raise SpdxGrammar::SpdxParseError, "Parse error at offset: #{@parser.index}" if tree.nil?
+    raise SpdxGrammar::SpdxParseError, "Unable to parse expression '#{data}'. Parse error at offset: #{@parser.index}" if tree.nil?
 
     clean_tree(tree)
     tree

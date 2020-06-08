@@ -28,7 +28,6 @@ describe Spdx do
 
     it "should return know license from an alias" do
       expect(Spdx.find("The Apache Software License, Version 2.0").name).to eq("Apache License 2.0")
-      expect(Spdx.find("Apache 2.0").name).to eq("Apache License 2.0")
       expect(Spdx.find("Apache2").name).to eq("Apache License 2.0")
       expect(Spdx.find("Apache License, Version 2.0").name).to eq("Apache License 2.0")
       expect(Spdx.find("Educational Community License, Version 2.0").name).to eq("Educational Community License v2.0")
@@ -222,6 +221,9 @@ describe Spdx do
     end
     it "returns false for a license in the exception spot" do
       expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH AGPL-3.0)")).to be false
+    end
+    it "provides full details for a parse error" do
+      expect { Spdx.parse_spdx("MIT OR ((WHAT)") }.to raise_error(SpdxGrammar::SpdxParseError, "Unable to parse expression '(MIT OR ((WHAT))'. Parse error at offset: 0")
     end
   end
 end

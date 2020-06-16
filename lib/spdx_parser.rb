@@ -8,10 +8,7 @@ require_relative "spdx_grammar"
 class SpdxParser
   Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), "spdx_parser.treetop")))
 
-  @semaphore = Mutex.new
-
   SKIP_PARENS = ["NONE", "NOASSERTION", ""].freeze
-  @parser = SpdxGrammarParser.new
 
   def self.parse(data)
     parse_tree(data)
@@ -23,13 +20,12 @@ class SpdxParser
   end
 
   private_class_method def self.parse_tree(data)
+    parser = SpdxGrammarParser.new # The generated grammar parser is not thread safe
     # Couldn't figure out treetop to make parens optional
     data = "(#{data})" unless SKIP_PARENS.include?(data)
-    tree = nil
-    @semaphore.synchronize do
-      tree = @parser.parse(data)
-    end
-    raise SpdxGrammar::SpdxParseError, "Unable to parse expression '#{data}'. Parse error at offset: #{@parser.index}" if tree.nil?
+
+    tree = parser.parse(data)
+    raise SpdxGrammar::SpdxParseError, "Unable to parse expression '#{data}'. Parse error at offset: #{parser.index}" if tree.nil?
 
     clean_tree(tree)
     tree

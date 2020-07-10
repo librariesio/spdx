@@ -9,19 +9,19 @@ grammar SpdxGrammar
   end
 
   rule body
-    (compound_expression / and / or / with / license / space )* <Body>
+    ( compound_expression / and / or / with / license )* <Body>
   end
 
   rule and
-    "AND" space !reserve_words <LogicalAnd>
+    space "AND" space !reserve_words <LogicalAnd>
   end
 
   rule or
-    "OR" space !reserve_words <LogicalOr>
+    space "OR" space !reserve_words <LogicalOr>
   end
 
   rule with
-    "WITH" space license_exception <With>
+    space "WITH" space license_exception <With>
   end
 
   rule license

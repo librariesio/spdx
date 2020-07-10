@@ -188,11 +188,13 @@ describe Spdx do
         expect(Spdx.valid_spdx?("MIT OR FAKEYLICENSE")).to be false
         expect(Spdx.valid_spdx?(nil)).to be false
         expect(Spdx.valid_spdx?("")).to be false
+        expect(Spdx.valid_spdx?("MIT (MIT)")).to be false
       end
       it "returns true for valid spdx" do
         expect(Spdx.valid_spdx?("(MIT OR MPL-2.0)")).to be true
         expect(Spdx.valid_spdx?("MIT")).to be true
         expect(Spdx.valid_spdx?("((MIT OR AGPL-1.0) AND (MIT OR MPL-2.0))")).to be true
+        expect(Spdx.valid_spdx?("MIT OR (MIT)")).to be true
       end
       it "returns true for NONE and NOASSERTION" do
         expect(Spdx.valid_spdx?("NONE")).to be true

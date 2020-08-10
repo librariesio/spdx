@@ -9,7 +9,7 @@ grammar SpdxGrammar
   end
 
   rule body
-    ( compound_expression / and / or / with / license )* <Body>
+    ( compound_expression / and / or / with / license_ref / document_ref / license )* <Body>
   end
 
   rule and
@@ -25,11 +25,19 @@ grammar SpdxGrammar
   end
 
   rule license
-    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.license_exists?(seq.first.text_value) || Spdx.license_exists?(seq.first.text_value.delete_suffix('+')) }  <License>
+    [a-zA-Z0-9\-\.\+]+ &{|seq| Spdx.license_exists?(seq.first.text_value) || Spdx.license_exists?(seq.first.text_value.delete_suffix('+')) }  <License>
+  end
+
+  rule license_ref
+    "LicenseRef-" [a-zA-Z0-9\-\.]+ <LicenseRef>
+  end
+
+  rule document_ref
+    "DocumentRef-" [a-zA-Z0-9\-\.]+ ":" license_ref <DocumentRef>
   end
 
   rule license_exception
-    [a-zA-Z0-9\-\+:\.]+ &{|seq| Spdx.exception_exists?(seq.first.text_value) } <LicenseException>
+    [a-zA-Z0-9\-\.]+ &{|seq| Spdx.exception_exists?(seq.first.text_value) } <LicenseException>
   end
 
   rule reserve_words

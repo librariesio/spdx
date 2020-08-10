@@ -1,6 +1,6 @@
 {
-  "licenseListVersion": "3.8-126-gff8ed78",
-  "releaseDate": "2020-05-15",
+  "licenseListVersion": "3.10",
+  "releaseDate": "2020-08-03",
   "exceptions": [
     {
       "reference": "./GCC-exception-2.0.html",

@@ -34,6 +34,15 @@ module SpdxGrammar
     end
   end
 
+  class UserDefinedLicense < Treetop::Runtime::SyntaxNode
+  end
+
+  class LicenseRef < Treetop::Runtime::SyntaxNode
+  end
+
+  class DocumentRef < Treetop::Runtime::SyntaxNode
+  end
+
   class LicenseException < Treetop::Runtime::SyntaxNode
     # TODO: actually do license exceptions
   end

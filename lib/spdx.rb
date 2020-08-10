@@ -19,7 +19,6 @@ module Spdx
       @exceptions = {}
       data["exceptions"].each do |details|
         id = details.delete("licenseExceptionId")
-        @exceptions[id.downcase] = details
         @exceptions[id] = details
       end
     end
@@ -27,21 +26,11 @@ module Spdx
   end
 
   def self.license_exists?(id)
-    licenses.key?(id.to_s.downcase)
-  end
-
-  def self.lookup_license(id)
-    json = licenses[id.to_s]
-    Spdx::License.new(id.to_s, json["name"], json["isOsiApproved"]) if json
-  end
-
-  def self.lookup_exception(id)
-    json = exceptions[id.to_s]
-    Spdx::Exception.new(id.to_s, json["name"], json["isDeprecatedLicenseId"]) if json
+    licenses.key?(id.to_s) || licenses.keys.one? { |key| key.downcase == id.downcase }
   end
 
   def self.exception_exists?(id)
-    exceptions.key?(id.to_s.downcase)
+    exceptions.key?(id.to_s) || exceptions.keys.one? { |key| key.downcase == id.downcase }
   end
 
   def self.licenses
@@ -50,7 +39,6 @@ module Spdx
       @licenses = {}
       data["licenses"].each do |details|
         id = details.delete("licenseId")
-        @licenses[id.downcase] = details
         @licenses[id] = details
       end
     end

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.version       = Spdx::VERSION
   spec.authors       = ["Tidelift, Inc."]
   spec.email         = ["support@tidelift.com"]
-  spec.summary       = "A SPDX license normalizer"
+  spec.summary       = "A SPDX license parser"
   spec.homepage      = "https://github.com/librariesio/spdx"
   spec.license       = "MIT"
 
@@ -18,7 +18,6 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "fuzzy_match", "~> 2.1"
   spec.add_dependency "treetop", "~> 1.6"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "pry"

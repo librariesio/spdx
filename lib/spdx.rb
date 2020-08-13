@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 require "spdx/version"
-require "fuzzy_match"
 require "spdx_parser"
 require "json"
 require_relative "exception"
 require_relative "license"
 
-# Fuzzy matcher for licenses to SPDX standard licenses
 module Spdx
   def self.names
     (licenses.keys + licenses.map { |_k, v| v["name"] }).sort

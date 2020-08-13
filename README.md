@@ -1,7 +1,6 @@
-# [Spdx](http://libraries.io/rubygems/spdx) - A SPDX license normalizer
+# [Spdx](http://libraries.io/rubygems/spdx) - A SPDX license parser
 
-This gem allows you to find the closest match using [FuzzyMatch](https://github.com/seamusabshere/fuzzy_match) in the [spdx-licenses](https://github.com/domcleal/spdx-licenses) list for similar (not necessarily exact) license names.
-
+This gem allows you validate and parse spdx expressions. It also contains (relatively) up to date license and license exception lists from https://github.com/spdx/license-list-data/tree/master/json
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,14 +20,25 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-Spdx.find('Apache 2') # => <SpdxLicenses::License:0x007fa3a2b462c8 @id="Apache-2.0", @name="Apache License 2.0", @osi_approved=true>
+Spdx.valid_spdx?("(MIT OR AGPL-3.0+)")
+=> true
+```
+```ruby
+Spdx.parse_spdx("(MIT OR AGPL-3.0+)")
+=> CompoundExpression+CompoundExpression0 offset=0, "((MIT OR AGPL-3.0+))" (body):
+  Body offset=1, "(MIT OR AGPL-3.0+)":
+    CompoundExpression+CompoundExpression0 offset=1, "(MIT OR AGPL-3.0+)" (body):
+      Body offset=2, "MIT OR AGPL-3.0+":
+        License+License0 offset=2, "MIT"
+        LogicalOr+Or0 offset=5, " OR " (space1,space2)
+        License+License0 offset=9, "AGPL-3.0+"
 ```
 
 ## Testing
 
 Run the tests with:
 
-    $ bundle exec rake
+    $ bundle exec rspec
 
 ## Contributing
 

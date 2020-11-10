@@ -48,6 +48,9 @@ describe Spdx do
       expect(Spdx.parse_spdx("NONE").licenses).to eq []
       expect(Spdx.parse_spdx("NOASSERTION").licenses).to eq []
     end
+    it "includes licenseref style licenses" do
+      expect(Spdx.parse_spdx("LicenseRef-yadayada OR MIT").licenses).to match_array %w[LicenseRef-yadayada MIT]
+    end
   end
 
   context "exceptions" do

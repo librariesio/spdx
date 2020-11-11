@@ -38,9 +38,15 @@ module SpdxGrammar
   end
 
   class LicenseRef < Treetop::Runtime::SyntaxNode
+    def licenses
+      text_value
+    end
   end
 
   class DocumentRef < Treetop::Runtime::SyntaxNode
+    def licenses
+      text_value
+    end
   end
 
   class LicenseException < Treetop::Runtime::SyntaxNode

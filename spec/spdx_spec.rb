@@ -48,6 +48,12 @@ describe Spdx do
       expect(Spdx.parse_spdx("NONE").licenses).to eq []
       expect(Spdx.parse_spdx("NOASSERTION").licenses).to eq []
     end
+    it "returns LicenseRefs" do
+      expect(Spdx.parse_spdx("MIT OR LicenseRef-MIT-style-1").licenses).to eq %w[MIT LicenseRef-MIT-style-1]
+    end
+    it "returns DocumentRefs" do
+      expect(Spdx.parse_spdx("MIT OR DocumentRef-something-1:LicenseRef-MIT-style-1").licenses).to eq %w[MIT DocumentRef-something-1:LicenseRef-MIT-style-1]
+    end
   end
 
   context "exceptions" do

@@ -21,6 +21,8 @@ describe Spdx do
         expect(Spdx.valid_spdx?("MIT")).to be true
         expect(Spdx.valid_spdx?("MIT OR MPL-2.0 AND AGPL-1.0")).to be true
         expect(Spdx.valid_spdx?("MIT OR (GPL-1.0 OR MPL-2.0) AND AGPL-1.0")).to be true
+        expect(Spdx.valid_spdx?("MIT AND MPL-2.0 OR AGPL-1.0")).to be true
+        expect(Spdx.valid_spdx?("MIT AND (GPL-1.0 OR MPL-2.0) OR AGPL-1.0")).to be true
         expect(Spdx.valid_spdx?("MIT OR (DocumentRef-something-1:LicenseRef-MIT-style-1 OR MPL-2.0) AND AGPL-1.0")).to be true
         expect(Spdx.valid_spdx?("((MIT OR AGPL-1.0) AND (MIT OR MPL-2.0))")).to be true
         expect(Spdx.valid_spdx?("MIT OR (MIT)")).to be true

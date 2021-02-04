@@ -5,10 +5,18 @@ grammar SpdxGrammar
   end
 
   rule compound_expression
-    ( expression space <Operand> / grouped_expression space? <Operand> ) "AND" ( space compound_expression <Operand> / space? grouped_expression <Operand> ) <LogicalAnd> /
-    ( expression space <Operand> / grouped_expression space? <Operand> ) "OR"  ( space compound_expression <Operand> / space? grouped_expression <Operand> ) <LogicalOr> /
+    or_expression /
+    and_expression /
     expression /
     grouped_expression
+  end
+
+  rule and_expression
+    ( expression space <Operand> / grouped_expression space? <Operand> ) "AND" ( space ( and_expression / expression ) <Operand> / space? grouped_expression <Operand> ) <LogicalAnd>
+  end
+
+  rule or_expression
+    ( ( and_expression / expression ) space <Operand> / grouped_expression space? <Operand> ) "OR"  ( space compound_expression <Operand> / space? grouped_expression <Operand> ) <LogicalOr>
   end
 
   rule expression

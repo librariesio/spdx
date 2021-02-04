@@ -24,15 +24,67 @@ Spdx.valid_spdx?("(MIT OR AGPL-3.0+)")
 => true
 ```
 ```ruby
-Spdx.parse_spdx("(MIT OR AGPL-3.0+)")
-=> CompoundExpression+CompoundExpression0 offset=0, "((MIT OR AGPL-3.0+))" (body):
-  Body offset=1, "(MIT OR AGPL-3.0+)":
-    CompoundExpression+CompoundExpression0 offset=1, "(MIT OR AGPL-3.0+)" (body):
-      Body offset=2, "MIT OR AGPL-3.0+":
-        License+License0 offset=2, "MIT"
-        LogicalOr+Or0 offset=5, " OR " (space1,space2)
-        License+License0 offset=9, "AGPL-3.0+"
+Spdx.parse_spdx("MIT OR AGPL-3.0+")
+ => LogicalOr+CompoundExpression9 offset=0, "MIT OR AGPL-3.0+":
+  Operand+CompoundExpression5 offset=0, "MIT " (expression,space):
+    License+LicenseId0 offset=0, "MIT" (idstring)
+  Operand+CompoundExpression7 offset=6, " AGPL-3.0+" (space,compound_expression):
+    LicensePlus+SimpleExpression0 offset=7, "AGPL-3.0+" (license_id):
+      License+LicenseId0 offset=7, "AGPL-3.0" (idstring)
 ```
+
+### Nodes
+
+Parsed SPDX license expressions can be a number of various nodes. Each of these nodes share a few methods, most notably `text_value` which contains the text that spans that node, and `licenses` which contains an array of individual licenses used in that portion of the expression. Below are the nodes in more detail, and their additional methods.
+
+#### `License`
+
+This node represents a single license, and is the result of the most simple form of expression, e.g. `Spdx.parse_spdx("MIT")`. It can also be found as a child node of other nodes.
+
+#### `LicensePlus`
+
+This node represents the current version of a license or any later version, e.g. `Spdx.parse_spdx("CDDL-1.0+")`. The inner license node can be found via the `child` method.
+
+#### `LicenseRef`
+
+This node represents a reference to a license not defined in the SPDX license list, e.g. `Spdx.parse_spdx("LicenseRef-23")`.
+
+#### `DocumentRef`
+
+Similar to `LicenseRef`, this node also represents a reference to a license not defined in the SPDX license list, e.g. `Spdx.parse_spdx("DocumentRef-spdx-tool-1.2:LicenseRef-MIT-Style-2")`.
+
+#### `LicenseException`
+
+This node represents an exception to a license. See `With`.
+
+#### `With`
+
+This node represents a license with an SPDX-defined license exception, e.g. `Spdx.parse_spdx("GPL-2.0-or-later WITH Bison-exception-2.2")`. This node has two extra methods, `license` and `exception`, which return the nodes for the license portion of the expression and the exception portion of the expression, respectively.
+
+#### `LogicalAnd`
+
+This node represents an "AND" expression, e.g. `Spdx.parse_spdx("LGPL-2.1-only AND MIT")`. This node has two extra methods, `left` and `right`, which return the node for the left side of the expression and the node for the right side of the expression, respectively. Any node can be the child of `LogicalAnd`, including `LogicalAnd`/`LogicalOr`.
+
+`Spdx.parse_spdx("(MIT AND GPL-1.0) AND MPL-2.0 AND Apache-2.0")` would result in the following tree:
+
+```txt
+LogicalAnd
+├── GroupedExpression
+│   └── LogicalAnd
+│       ├── License (MIT)
+│       └── License (GPL-1.0)
+└── LogicalAnd
+    ├── License (MPL-2.0)
+    └── License (Apache-2.0)
+```
+
+#### `LogicalOr`
+
+The same as `LogicalAnd`, but for "OR" expressions.
+
+#### `GroupedExpression`
+
+This node represents expressions surrounded by parentheses, e.g. `Spdx.parse_spdx("(MIT OR LGPL-2.0)")` or `Spdx.parse_spdx("(MIT)")`. The child node can be found via the `child` method.
 
 ## Testing
 

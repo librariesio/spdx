@@ -21,8 +21,6 @@ class SpdxParser
 
   private_class_method def self.parse_tree(data)
     parser = SpdxGrammarParser.new # The generated grammar parser is not thread safe
-    # Couldn't figure out treetop to make parens optional
-    data = "(#{data})" unless SKIP_PARENS.include?(data)
 
     tree = parser.parse(data)
     raise SpdxGrammar::SpdxParseError, "Unable to parse expression '#{data}'. Parse error at offset: #{parser.index}" if tree.nil?

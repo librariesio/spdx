@@ -7,6 +7,9 @@ describe Spdx do
     context "valid_spdx?" do
       it "returns false for invalid spdx" do
         expect(Spdx.valid_spdx?("AND AND")).to be false
+        expect(Spdx.valid_spdx?(" AND ")).to be false
+        expect(Spdx.valid_spdx?(" WITH ")).to be false
+        expect(Spdx.valid_spdx?("MIT AND ")).to be false
         expect(Spdx.valid_spdx?("MIT OR MIT AND OR")).to be false
         expect(Spdx.valid_spdx?("MIT OR FAKEYLICENSE")).to be false
         expect(Spdx.valid_spdx?(nil)).to be false
@@ -16,6 +19,9 @@ describe Spdx do
       it "returns true for valid spdx" do
         expect(Spdx.valid_spdx?("(MIT OR MPL-2.0)")).to be true
         expect(Spdx.valid_spdx?("MIT")).to be true
+        expect(Spdx.valid_spdx?("MIT OR MPL-2.0 AND AGPL-1.0")).to be true
+        expect(Spdx.valid_spdx?("MIT OR (GPL-1.0 OR MPL-2.0) AND AGPL-1.0")).to be true
+        expect(Spdx.valid_spdx?("MIT OR (DocumentRef-something-1:LicenseRef-MIT-style-1 OR MPL-2.0) AND AGPL-1.0")).to be true
         expect(Spdx.valid_spdx?("((MIT OR AGPL-1.0) AND (MIT OR MPL-2.0))")).to be true
         expect(Spdx.valid_spdx?("MIT OR (MIT)")).to be true
       end
@@ -57,14 +63,14 @@ describe Spdx do
   end
 
   context "exceptions" do
-    it "parses a valid spdx with expression" do
+    it "parses a valid spdx WITH expression" do
       expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to be true
     end
     it "returns false for a license in the exception spot" do
       expect(Spdx.valid_spdx?("EPL-2.0 OR (GPL-2.0-only WITH AGPL-3.0)")).to be false
     end
     it "provides full details for a parse error" do
-      expect { Spdx.parse_spdx("MIT OR ((WHAT)") }.to raise_error(SpdxGrammar::SpdxParseError, "Unable to parse expression '(MIT OR ((WHAT))'. Parse error at offset: 0")
+      expect { Spdx.parse_spdx("MIT OR ((WHAT)") }.to raise_error(SpdxGrammar::SpdxParseError, "Unable to parse expression 'MIT OR ((WHAT)'. Parse error at offset: 3")
     end
   end
 end

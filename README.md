@@ -69,17 +69,16 @@ This node represents a license with an SPDX-defined license exception, e.g. `Spd
 
 This node represents an "AND" expression, e.g. `Spdx.parse("LGPL-2.1-only AND MIT")`. This node has two extra methods, `left` and `right`, which return the node for the left side of the expression and the node for the right side of the expression, respectively. Any node can be the child of `LogicalAnd`, including `LogicalAnd`/`LogicalOr`.
 
-`Spdx.parse("(MIT AND GPL-1.0) AND MPL-2.0 AND Apache-2.0")` would result in the following tree:
+`Spdx.parse("(MIT AND GPL-1.0) OR MPL-2.0 AND Apache-2.0")` would result in the following tree:
 
 ```txt
-LogicalAnd
-├── GroupedExpression
-│   └── LogicalAnd
-│       ├── License (MIT)
-│       └── License (GPL-1.0)
+LogicalOr
+├── LogicalAnd
+│   ├── License (MIT)
+│   └── License (GPL-1.0)
 └── LogicalAnd
     ├── License (MPL-2.0)
-    └── License (Apache-2.0)
+    └── License Apache-2.0
 ```
 
 #### `LogicalOr`
@@ -90,7 +89,9 @@ The same as `LogicalAnd`, but for "OR" expressions.
 
 Run the tests with:
 
-    $ bundle exec rspec
+```sh
+bundle exec rspec
+```
 
 ## Contributing
 

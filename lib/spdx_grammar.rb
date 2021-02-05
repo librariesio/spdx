@@ -1,27 +1,19 @@
 # frozen_string_literal: true
 
 module SpdxGrammar
-  class GroupedExpression < Treetop::Runtime::SyntaxNode
-    def licenses
-      child.licenses
-    end
-
-    def child
-      elements[0]
-    end
-  end
-
   class LogicalBinary < Treetop::Runtime::SyntaxNode
+    # Used internally
+
     def licenses
       (left.licenses + right.licenses).uniq
     end
 
     def left
-      elements[0].elements[0]
+      elements[0]
     end
 
     def right
-      elements[1].elements[0]
+      elements[1]
     end
   end
 
@@ -29,9 +21,6 @@ module SpdxGrammar
   end
 
   class LogicalOr < LogicalBinary
-  end
-
-  class Operand < Treetop::Runtime::SyntaxNode
   end
 
   class With < Treetop::Runtime::SyntaxNode
@@ -90,6 +79,14 @@ module SpdxGrammar
 
   class LicenseException < Treetop::Runtime::SyntaxNode
     # TODO: actually do license exceptions
+  end
+
+  class GroupedExpression < Treetop::Runtime::SyntaxNode
+    # Used internally
+  end
+
+  class Operand < Treetop::Runtime::SyntaxNode
+    # Used internally
   end
 
   class SpdxParseError < StandardError

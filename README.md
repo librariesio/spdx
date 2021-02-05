@@ -25,12 +25,10 @@ Spdx.valid_spdx?("(MIT OR AGPL-3.0+)")
 ```
 ```ruby
 Spdx.parse_spdx("MIT OR AGPL-3.0+")
- => LogicalOr+CompoundExpression9 offset=0, "MIT OR AGPL-3.0+":
-  Operand+CompoundExpression5 offset=0, "MIT " (expression,space):
-    License+LicenseId0 offset=0, "MIT" (idstring)
-  Operand+CompoundExpression7 offset=6, " AGPL-3.0+" (space,compound_expression):
-    LicensePlus+SimpleExpression0 offset=7, "AGPL-3.0+" (license_id):
-      License+LicenseId0 offset=7, "AGPL-3.0" (idstring)
+ => LogicalOr+OrExpression4 offset=0, "MIT OR AGPL-3.0+":
+  License+LicenseId0 offset=0, "MIT" (idstring)
+  LicensePlus+SimpleExpression0 offset=7, "AGPL-3.0+" (license_id):
+    License+LicenseId0 offset=7, "AGPL-3.0" (idstring)
 ```
 
 ### Nodes
@@ -81,10 +79,6 @@ LogicalAnd
 #### `LogicalOr`
 
 The same as `LogicalAnd`, but for "OR" expressions.
-
-#### `GroupedExpression`
-
-This node represents expressions surrounded by parentheses, e.g. `Spdx.parse_spdx("(MIT OR LGPL-2.0)")` or `Spdx.parse_spdx("(MIT)")`. The child node can be found via the `child` method.
 
 ## Testing
 

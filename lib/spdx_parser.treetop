@@ -5,10 +5,7 @@ grammar SpdxGrammar
   end
 
   rule compound_expression
-    or_expression /
-    and_expression /
-    expression /
-    grouped_expression
+    or_expression / and_expression / expression / grouped_expression
   end
 
   rule and_expression

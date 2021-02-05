@@ -90,7 +90,7 @@ module Spdx
     end
   end
 
-  def self.valid_spdx?(spdx_string)
+  def self.valid?(spdx_string)
     return false unless spdx_string.is_a?(String)
 
     SpdxParser.parse(spdx_string)
@@ -99,7 +99,7 @@ module Spdx
     false
   end
 
-  def self.parse_spdx(spdx_string)
+  def self.parse(spdx_string)
     SpdxParser.parse(spdx_string)
   end
 end

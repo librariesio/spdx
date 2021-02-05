@@ -34,6 +34,9 @@ Spdx.parse("MIT OR AGPL-3.0+")
 
 ```ruby
 Spdx.normalize("Mit OR agpl-3.0+ AND APACHE-2.0")
+=> "MIT OR (AGPL-3.0+ AND Apache-2.0)"
+
+Spdx.normalize("Mit OR agpl-3.0+ AND APACHE-2.0", top_level_parens: true)
 => "(MIT OR (AGPL-3.0+ AND Apache-2.0))"
 ```
 

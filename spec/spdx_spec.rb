@@ -65,23 +65,33 @@ describe Spdx do
       expect(Spdx.normalize("NOASSERTION")).to eq "NOASSERTION"
     end
     it "normalizes boolean expressions" do
-      expect(Spdx.normalize("mit AND gPL-2.0")).to eq "(MIT AND GPL-2.0)"
-      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "(MIT OR GPL-2.0)"
-      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "(MIT OR GPL-2.0)"
+      expect(Spdx.normalize("mit AND gPL-2.0")).to eq "MIT AND GPL-2.0"
+      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "MIT OR GPL-2.0"
+      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "MIT OR GPL-2.0"
+
+      # With top level parens
+      expect(Spdx.normalize("mit AND gPL-2.0", top_level_parens: true)).to eq "(MIT AND GPL-2.0)"
+      expect(Spdx.normalize("mit OR gPL-2.0", top_level_parens: true)).to eq "(MIT OR GPL-2.0)"
+      expect(Spdx.normalize("mit OR gPL-2.0", top_level_parens: true)).to eq "(MIT OR GPL-2.0)"
 
       # Does semantic grouping
-      expect(Spdx.normalize("mit OR gPL-2.0 AND apAcHe-2.0+")).to eq "(MIT OR (GPL-2.0 AND Apache-2.0+))"
+      expect(Spdx.normalize("mit OR gPL-2.0 AND apAcHe-2.0+")).to eq "MIT OR (GPL-2.0 AND Apache-2.0+)"
 
       # But also preserves original groups
-      expect(Spdx.normalize("(mit OR gPL-2.0) AND apAcHe-2.0+")).to eq "((MIT OR GPL-2.0) AND Apache-2.0+)"
+      expect(Spdx.normalize("(mit OR gPL-2.0) AND apAcHe-2.0+")).to eq "(MIT OR GPL-2.0) AND Apache-2.0+"
     end
     it "normalizes WITH expressions" do
-      expect(Spdx.normalize("GPL-2.0-only WITH Classpath-exception-2.0")).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
-      expect(Spdx.normalize("Gpl-2.0-ONLY WITH ClassPath-exception-2.0")).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
-      expect(Spdx.normalize("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
-      expect(Spdx.normalize("epl-2.0 OR (gpl-2.0-only WITH classpath-exception-2.0)")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
-      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
-      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0 AND mpl-2.0+")).to eq "(EPL-2.0 OR ((GPL-2.0-only WITH Classpath-exception-2.0) AND MPL-2.0+))"
+      expect(Spdx.normalize("GPL-2.0-only WITH Classpath-exception-2.0")).to eq "GPL-2.0-only WITH Classpath-exception-2.0"
+      expect(Spdx.normalize("Gpl-2.0-ONLY WITH ClassPath-exception-2.0")).to eq "GPL-2.0-only WITH Classpath-exception-2.0"
+
+      # With top level parens
+      expect(Spdx.normalize("GPL-2.0-only WITH Classpath-exception-2.0", top_level_parens: true)).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("Gpl-2.0-ONLY WITH ClassPath-exception-2.0", top_level_parens: true)).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
+
+      expect(Spdx.normalize("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to eq "EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("epl-2.0 OR (gpl-2.0-only WITH classpath-exception-2.0)")).to eq "EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0")).to eq "EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0 AND mpl-2.0+")).to eq "EPL-2.0 OR ((GPL-2.0-only WITH Classpath-exception-2.0) AND MPL-2.0+)"
     end
   end
   context "licenses" do

@@ -61,18 +61,36 @@ module Spdx
     @exceptions_downcase
   end
 
-  def self.normalize(spdx_string)
-    normalize_tree(SpdxParser.parse(spdx_string))
+  def self.normalize(spdx_string, top_level_parens: false)
+    normalize_tree(SpdxParser.parse(spdx_string), parens: top_level_parens)
   end
 
-  private_class_method def self.normalize_tree(node)
+  private_class_method def self.normalize_tree(node, parens: true)
     case node
     when SpdxGrammar::LogicalAnd
-      "(#{normalize_tree(node.left)} AND #{normalize_tree(node.right)})"
+      left = normalize_tree(node.left)
+      right = normalize_tree(node.right)
+      if parens
+        "(#{left} AND #{right})"
+      else
+        "#{left} AND #{right}"
+      end
     when SpdxGrammar::LogicalOr
-      "(#{normalize_tree(node.left)} OR #{normalize_tree(node.right)})"
+      left = normalize_tree(node.left)
+      right = normalize_tree(node.right)
+      if parens
+        "(#{left} OR #{right})"
+      else
+        "#{left} OR #{right}"
+      end
     when SpdxGrammar::With
-      "(#{normalize_tree(node.license)} WITH #{normalize_tree(node.exception)})"
+      license = normalize_tree(node.license)
+      exception = normalize_tree(node.exception)
+      if parens
+        "(#{license} WITH #{exception})"
+      else
+        "#{license} WITH #{exception}"
+      end
     when SpdxGrammar::None
       "NONE"
     when SpdxGrammar::NoAssertion

@@ -23,12 +23,18 @@ Or install it yourself as:
 Spdx.valid_spdx?("(MIT OR AGPL-3.0+)")
 => true
 ```
+
 ```ruby
 Spdx.parse_spdx("MIT OR AGPL-3.0+")
- => LogicalOr+OrExpression4 offset=0, "MIT OR AGPL-3.0+":
+=> LogicalOr+OrExpression4 offset=0, "MIT OR AGPL-3.0+":
   License+LicenseId0 offset=0, "MIT" (idstring)
   LicensePlus+SimpleExpression0 offset=7, "AGPL-3.0+" (license_id):
     License+LicenseId0 offset=7, "AGPL-3.0" (idstring)
+```
+
+```ruby
+Spdx.normalize("Mit OR agpl-3.0+ AND APACHE-2.0")
+=> "(MIT OR (AGPL-3.0+ AND Apache-2.0))"
 ```
 
 ### Nodes

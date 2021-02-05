@@ -48,6 +48,42 @@ describe Spdx do
       end
     end
   end
+  context "normalize" do
+    it "normalizes simple licenses" do
+      expect(Spdx.normalize("MIT")).to eq "MIT"
+      expect(Spdx.normalize("mit")).to eq "MIT"
+      expect(Spdx.normalize("MiT")).to eq "MIT"
+      expect(Spdx.normalize("(MiT)")).to eq "MIT"
+      expect(Spdx.normalize("(((MiT)))")).to eq "MIT"
+      expect(Spdx.normalize("LicenseRef-MIT-style-1")).to eq "LicenseRef-MIT-style-1"
+      expect(Spdx.normalize("DocumentRef-something-1:LicenseRef-MIT-style-1")).to eq "DocumentRef-something-1:LicenseRef-MIT-style-1"
+      expect(Spdx.normalize("Apache-2.0+")).to eq "Apache-2.0+"
+      expect(Spdx.normalize("apache-2.0+")).to eq "Apache-2.0+"
+    end
+    it "normalizes NONE/NOASSERTION" do
+      expect(Spdx.normalize("NONE")).to eq "NONE"
+      expect(Spdx.normalize("NOASSERTION")).to eq "NOASSERTION"
+    end
+    it "normalizes boolean expressions" do
+      expect(Spdx.normalize("mit AND gPL-2.0")).to eq "(MIT AND GPL-2.0)"
+      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "(MIT OR GPL-2.0)"
+      expect(Spdx.normalize("mit OR gPL-2.0")).to eq "(MIT OR GPL-2.0)"
+
+      # Does semantic grouping
+      expect(Spdx.normalize("mit OR gPL-2.0 AND apAcHe-2.0+")).to eq "(MIT OR (GPL-2.0 AND Apache-2.0+))"
+
+      # But also preserves original groups
+      expect(Spdx.normalize("(mit OR gPL-2.0) AND apAcHe-2.0+")).to eq "((MIT OR GPL-2.0) AND Apache-2.0+)"
+    end
+    it "normalizes WITH expressions" do
+      expect(Spdx.normalize("GPL-2.0-only WITH Classpath-exception-2.0")).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("Gpl-2.0-ONLY WITH ClassPath-exception-2.0")).to eq "(GPL-2.0-only WITH Classpath-exception-2.0)"
+      expect(Spdx.normalize("EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0)")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
+      expect(Spdx.normalize("epl-2.0 OR (gpl-2.0-only WITH classpath-exception-2.0)")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
+      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0")).to eq "(EPL-2.0 OR (GPL-2.0-only WITH Classpath-exception-2.0))"
+      expect(Spdx.normalize("epl-2.0 OR gpl-2.0-only WITH classpath-exception-2.0 AND mpl-2.0+")).to eq "(EPL-2.0 OR ((GPL-2.0-only WITH Classpath-exception-2.0) AND MPL-2.0+))"
+    end
+  end
   context "licenses" do
     it "returns a list of possible licenses" do
       expect(Spdx.parse_spdx("MIT OR MPL-2.0").licenses).to eq ["MIT", "MPL-2.0"]

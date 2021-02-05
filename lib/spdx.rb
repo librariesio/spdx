@@ -61,6 +61,35 @@ module Spdx
     @exceptions_downcase
   end
 
+  def self.normalize(spdx_string)
+    normalize_tree(SpdxParser.parse(spdx_string))
+  end
+
+  private_class_method def self.normalize_tree(node)
+    case node
+    when SpdxGrammar::LogicalAnd
+      "(#{normalize_tree(node.left)} AND #{normalize_tree(node.right)})"
+    when SpdxGrammar::LogicalOr
+      "(#{normalize_tree(node.left)} OR #{normalize_tree(node.right)})"
+    when SpdxGrammar::With
+      "(#{normalize_tree(node.license)} WITH #{normalize_tree(node.exception)})"
+    when SpdxGrammar::None
+      "NONE"
+    when SpdxGrammar::NoAssertion
+      "NOASSERTION"
+    when SpdxGrammar::License
+      licenses_downcase[node.text_value.downcase]
+    when SpdxGrammar::LicensePlus
+      "#{normalize_tree(node.child)}+"
+    when SpdxGrammar::LicenseRef
+      node.text_value
+    when SpdxGrammar::DocumentRef
+      node.text_value
+    when SpdxGrammar::LicenseException
+      exceptions_downcase[node.text_value.downcase]
+    end
+  end
+
   def self.valid_spdx?(spdx_string)
     return false unless spdx_string.is_a?(String)
 

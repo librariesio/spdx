@@ -1,19 +1,40 @@
 # frozen_string_literal: true
 
 module SpdxGrammar
-  class CompoundExpression < Treetop::Runtime::SyntaxNode
+  class LogicalBinary < Treetop::Runtime::SyntaxNode
+    # Used internally
+
     def licenses
-      elements[0].licenses
+      (left.licenses + right.licenses).uniq
+    end
+
+    def left
+      elements[0]
+    end
+
+    def right
+      elements[1]
     end
   end
 
-  class LogicalOr < Treetop::Runtime::SyntaxNode
+  class LogicalAnd < LogicalBinary
   end
 
-  class LogicalAnd < Treetop::Runtime::SyntaxNode
+  class LogicalOr < LogicalBinary
   end
 
   class With < Treetop::Runtime::SyntaxNode
+    def licenses
+      license.licenses
+    end
+
+    def license
+      elements[0]
+    end
+
+    def exception
+      elements[1]
+    end
   end
 
   class None < Treetop::Runtime::SyntaxNode
@@ -30,22 +51,29 @@ module SpdxGrammar
 
   class License < Treetop::Runtime::SyntaxNode
     def licenses
-      text_value
+      [text_value]
     end
   end
 
-  class UserDefinedLicense < Treetop::Runtime::SyntaxNode
+  class LicensePlus < Treetop::Runtime::SyntaxNode
+    def licenses
+      child.licenses
+    end
+
+    def child
+      elements[0]
+    end
   end
 
   class LicenseRef < Treetop::Runtime::SyntaxNode
     def licenses
-      text_value
+      [text_value]
     end
   end
 
   class DocumentRef < Treetop::Runtime::SyntaxNode
     def licenses
-      text_value
+      [text_value]
     end
   end
 
@@ -53,10 +81,12 @@ module SpdxGrammar
     # TODO: actually do license exceptions
   end
 
-  class Body < Treetop::Runtime::SyntaxNode
-    def licenses
-      elements.map { |node| node.licenses if node.respond_to?(:licenses) }.flatten.uniq.compact
-    end
+  class GroupedExpression < Treetop::Runtime::SyntaxNode
+    # Used internally
+  end
+
+  class Operand < Treetop::Runtime::SyntaxNode
+    # Used internally
   end
 
   class SpdxParseError < StandardError

@@ -1,47 +1,56 @@
 grammar SpdxGrammar
 
-  rule spdx_expression
+  rule license_expression
     compound_expression / none / no_assertion
   end
 
   rule compound_expression
-    '(' body ')' <CompoundExpression>
+    or_expression / and_expression / expression / grouped_expression
   end
 
-  rule body
-    ( compound_expression / and / or / with / license_ref / document_ref / license )* <Body>
+  rule and_expression
+    ( expression space <Operand> / grouped_expression space? <Operand> ) "AND" ( space ( and_expression / expression ) <Operand> / space? grouped_expression <Operand> ) <LogicalAnd>
   end
 
-  rule and
-    space "AND" space !reserve_words <LogicalAnd>
+  rule or_expression
+    ( ( and_expression / expression ) space <Operand> / grouped_expression space? <Operand> ) "OR"  ( space compound_expression <Operand> / space? grouped_expression <Operand> ) <LogicalOr>
   end
 
-  rule or
-    space "OR" space !reserve_words <LogicalOr>
+  rule expression
+    simple_expression space "WITH" space license_exception_id <With> /
+    simple_expression
   end
 
-  rule with
-    space "WITH" space license_exception <With>
+  rule grouped_expression
+    '(' compound_expression ')' <GroupedExpression>
   end
 
-  rule license
-    [a-zA-Z0-9\-\.\+]+ &{|seq| Spdx.license_exists?(seq.first.text_value) || Spdx.license_exists?(seq.first.text_value.delete_suffix('+')) }  <License>
+  rule simple_expression
+    license_id '+' <LicensePlus> / license_id / ref
+  end
+
+  rule ref
+    document_ref / license_ref
   end
 
   rule license_ref
-    "LicenseRef-" [a-zA-Z0-9\-\.]+ <LicenseRef>
+    "LicenseRef-" idstring <LicenseRef>
   end
 
   rule document_ref
-    "DocumentRef-" [a-zA-Z0-9\-\.]+ ":" license_ref <DocumentRef>
+    "DocumentRef-" idstring ':' license_ref <DocumentRef>
   end
 
-  rule license_exception
-    [a-zA-Z0-9\-\.]+ &{|seq| Spdx.exception_exists?(seq.first.text_value) } <LicenseException>
+  rule license_id
+    idstring &{|seq| Spdx.license_exists?(seq.first.text_value) } <License>
   end
 
-  rule reserve_words
-    "AND" / "OR" / "WITH"
+  rule license_exception_id
+    idstring &{|seq| Spdx.exception_exists?(seq.first.text_value) } <LicenseException>
+  end
+
+  rule idstring
+    [a-zA-Z0-9\-\.]+
   end
 
   rule none

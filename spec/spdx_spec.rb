@@ -4,6 +4,28 @@ require "spec_helper"
 
 describe Spdx do
   context "spdx parsing" do
+    context "parse" do
+      it "handles bad input" do
+        expect { Spdx.parse(nil) }.to raise_error(SpdxGrammar::SpdxParseError)
+        expect { Spdx.parse("") }.to raise_error(SpdxGrammar::SpdxParseError)
+      end
+      it "parses into respective classes" do
+        expect(Spdx.parse("MIT")).to be_an_instance_of(SpdxGrammar::License)
+        expect(Spdx.parse("MIT AND Apache-2.0")).to be_an_instance_of(SpdxGrammar::LogicalAnd)
+        expect(Spdx.parse("(MIT AND Apache-2.0)")).to be_an_instance_of(SpdxGrammar::LogicalAnd)
+        expect(Spdx.parse("MIT OR Apache-2.0")).to be_an_instance_of(SpdxGrammar::LogicalOr)
+        expect(Spdx.parse("MIT AND Apache-2.0").left).to be_an_instance_of(SpdxGrammar::License)
+        expect(Spdx.parse("MIT AND Apache-2.0").right).to be_an_instance_of(SpdxGrammar::License)
+        expect(Spdx.parse("MIT+")).to be_an_instance_of(SpdxGrammar::LicensePlus)
+        expect(Spdx.parse("LicenseRef-MIT-style-1")).to be_an_instance_of(SpdxGrammar::LicenseRef)
+        expect(Spdx.parse("DocumentRef-something-1:LicenseRef-MIT-style-1")).to be_an_instance_of(SpdxGrammar::DocumentRef)
+        expect(Spdx.parse("GPL-2.0-only WITH Classpath-exception-2.0")).to be_an_instance_of(SpdxGrammar::With)
+        expect(Spdx.parse("GPL-2.0-only WITH Classpath-exception-2.0").license).to be_an_instance_of(SpdxGrammar::License)
+        expect(Spdx.parse("GPL-2.0-only WITH Classpath-exception-2.0").exception).to be_an_instance_of(SpdxGrammar::LicenseException)
+        expect(Spdx.parse("NONE")).to be_an_instance_of(SpdxGrammar::None)
+        expect(Spdx.parse("NOASSERTION")).to be_an_instance_of(SpdxGrammar::NoAssertion)
+      end
+    end
     context "valid?" do
       it "returns false for invalid spdx" do
         expect(Spdx.valid?("AND AND")).to be false

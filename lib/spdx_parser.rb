@@ -11,6 +11,7 @@ class SpdxParser
   SKIP_PARENS = ["NONE", "NOASSERTION", ""].freeze
 
   def self.parse(data)
+    data ||= ""
     parse_tree(data)
   end
 

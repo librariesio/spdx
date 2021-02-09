@@ -57,7 +57,7 @@ module SpdxGrammar
 
   class LicensePlus < Treetop::Runtime::SyntaxNode
     def licenses
-      child.licenses
+      child.licenses.map { |license| "#{license}+" }
     end
 
     def child

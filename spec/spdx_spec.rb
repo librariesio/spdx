@@ -118,7 +118,10 @@ describe Spdx do
   end
   context "licenses" do
     it "returns a list of possible licenses" do
+      expect(Spdx.parse("MIT").licenses).to eq ["MIT"]
       expect(Spdx.parse("MIT OR MPL-2.0").licenses).to eq ["MIT", "MPL-2.0"]
+      expect(Spdx.parse("MIT OR MPL-2.0+").licenses).to eq ["MIT", "MPL-2.0+"]
+      expect(Spdx.parse("GPL-2.0-only WITH Classpath-exception-2.0").licenses).to eq ["GPL-2.0-only"]
     end
     it "returns empty array for NONE or NOASSERTION" do
       expect(Spdx.parse("NONE").licenses).to eq []

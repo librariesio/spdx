@@ -12,53 +12,39 @@ module Spdx
   end
 
   def self.exceptions
-    unless defined?(@exceptions)
-      data = JSON.parse(File.read(File.expand_path("../exceptions.json", __dir__)))
-      @exceptions = {}
-
-      data["exceptions"].each do |details|
-        id = details.delete("licenseExceptionId")
-        @exceptions[id] = details
+    @exceptions ||=
+      JSON.parse(File.read(File.expand_path("../exceptions.json", __dir__)))["exceptions"]
+        .each_with_object({}) do |details, all|
+        all[details.delete("licenseExceptionId")] = details
       end
-    end
-    @exceptions
   end
 
   def self.license_exists?(id)
-    licenses.key?(id.to_s) || licenses_downcase.key?(id.to_s.downcase)
+    licenses_downcase.key?(id.to_s.downcase)
   end
 
   def self.exception_exists?(id)
-    exceptions.key?(id.to_s) || exceptions_downcase.key?(id.to_s.downcase)
+    exceptions_downcase.key?(id.to_s.downcase)
   end
 
   def self.licenses
-    unless defined?(@licenses)
-      data = JSON.parse(File.read(File.expand_path("../licenses.json", __dir__)))
-      @licenses = {}
-
-      data["licenses"].each do |details|
-        id = details.delete("licenseId")
-        @licenses[id] = details
-      end
-    end
-    @licenses
+    @licenses ||=
+      JSON.parse(File.read(File.expand_path("../licenses.json", __dir__)))["licenses"]
+        .each_with_object({}).each do |details, all|
+          all[details.delete("licenseId")] = details
+        end
   end
 
   def self.licenses_downcase
-    unless defined?(@licenses_downcase)
-      @licenses_downcase = {}
-      licenses.keys.each { |key| @licenses_downcase[key.downcase] = key }
+    @licenses_downcase ||= licenses.keys.each_with_object({}) do |(id, _license), all|
+      all[id.downcase] = id
     end
-    @licenses_downcase
   end
 
   def self.exceptions_downcase
-    unless defined?(@exceptions_downcase)
-      @exceptions_downcase = {}
-      exceptions.keys.each { |key| @exceptions_downcase[key.downcase] = key }
+    @exceptions_downcase ||= exceptions.keys.each_with_object({}) do |(id, _license), all|
+      all[id.downcase] = id
     end
-    @exceptions_downcase
   end
 
   def self.normalize(spdx_string, top_level_parens: false)
